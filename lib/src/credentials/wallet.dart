@@ -11,9 +11,8 @@ import 'package:pointycastle/key_derivators/pbkdf2.dart' as pbkdf2;
 import 'package:pointycastle/key_derivators/scrypt.dart' as scrypt;
 import 'package:pointycastle/macs/hmac.dart';
 import 'package:pointycastle/stream/ctr.dart';
+import 'package:web3dart/crypto.dart';
 
-import '../crypto/formatting.dart';
-import '../crypto/keccak.dart';
 import '../crypto/random_bridge.dart';
 import '../utils/typed_data.dart';
 import '../utils/uuid.dart';
@@ -97,7 +96,7 @@ class _ScryptKeyDerivator extends _KeyDerivator {
 @immutable
 class Wallet {
   /// The credentials stored in this wallet file
-  final EthPrivateKey privateKey;
+  final XCBPrivateKey privateKey;
 
   /// The key derivator used to obtain the aes decryption key from the password
   final _KeyDerivator _derivator;
@@ -141,7 +140,7 @@ class Wallet {
   /// The default value for [scryptN] is 8192. Be aware that this N must be a
   /// power of two.
   factory Wallet.createNew(
-      EthPrivateKey credentials, String password, Random random,
+      XCBPrivateKey credentials, String password, Random random,
       {int scryptN = 8192, int p = 1}) {
     final passwordBytes = Uint8List.fromList(utf8.encode(password));
     final dartRandom = RandomBridge(random);
@@ -244,7 +243,7 @@ class Wallet {
     final aes = _initCipher(false, aesKey, iv);
 
     final privateKey = aes.process(Uint8List.fromList(encryptedPrivateKey));
-    final credentials = EthPrivateKey(privateKey);
+    final credentials = XCBPrivateKey(privateKey);
 
     final id = parseUuid(data['id'] as String);
 
@@ -254,7 +253,7 @@ class Wallet {
   static String _generateMac(List<int> dk, List<int> ciphertext) {
     final macBody = <int>[...dk.sublist(16, 32), ...ciphertext];
 
-    return bytesToHex(keccak256(uint8ListFromList(macBody)));
+    return bytesToHex(sha3_256(uint8ListFromList(macBody)));
   }
 
   static CTRStreamCipher _initCipher(

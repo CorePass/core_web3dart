@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:web3dart/crypto.dart';
+
 import '../../crypto/formatting.dart';
-import '../../crypto/keccak.dart';
 import '../../utils/length_tracking_byte_sink.dart';
 import 'arrays.dart';
 import 'tuple.dart';
@@ -28,7 +29,7 @@ const Map<String, ContractFunctionType> _functionTypeNames = {
 /// instead of sending a transaction for the invocation. That in turn makes them
 /// free to use. Mutable functions, like [nonPayable] or [payable] may write to
 /// the blockchain, which means that they can only be executed as part of a
-/// transaction, which has gas costs.
+/// transaction, which has energy costs.
 enum StateMutability {
   /// Function whose output depends solely on it's input. It does not ready any
   /// state from the blockchain.
@@ -192,14 +193,14 @@ class ContractFunction {
 
   /// Returns true if this function is constant, i.e. it cannot modify the state
   /// of the blockchain when called. This allows the function to be called
-  /// without sending Ether or gas as the connected client can compute it
+  /// without sending Ether or energy as the connected client can compute it
   /// locally, no expensive mining will be required.
   bool get isConstant =>
       mutability == StateMutability.view || mutability == StateMutability.pure;
 
   /// Returns true if this function can be used to send Ether to a smart
   /// contract that the contract will actually keep. Normally, all Ether sent
-  /// with a transaction will be used to pay for gas fees and the rest will be
+  /// with a transaction will be used to pay for energy fees and the rest will be
   /// sent back. Here however, the Ether (minus the fees) will be kept by the
   /// contract.
   bool get isPayable => mutability == StateMutability.payable;
@@ -257,7 +258,7 @@ class ContractFunction {
   ///
   /// [by solidity]: https://solidity.readthedocs.io/en/develop/abi-spec.html#function-selector
   Uint8List get selector {
-    return keccakUtf8(encodeName()).sublist(0, 4);
+    return sha3Utf8(encodeName()).sublist(0, 4);
   }
 
   /// Uses the known types of the function output to decode the value returned
@@ -296,7 +297,7 @@ class ContractEvent {
 
   /// The signature of this event, which is the keccak hash of the event's name
   /// followed by it's components.
-  late final Uint8List signature = keccakUtf8(stringSignature);
+  late final Uint8List signature = sha3Utf8(stringSignature);
 
   /// Decodes the fields of this event from the event's [topics] and its [data]
   /// payload.

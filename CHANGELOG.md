@@ -1,6 +1,6 @@
 ## 2.3.3
 
-- Fix signing legacy transactions without gas and without a client.
+- Fix signing legacy transactions without energy and without a client.
 
 ## 2.3.2
 
@@ -16,7 +16,7 @@
 
 ## 2.2.0
 
-- Add `EthPrivateKey.publicKey` getters
+- Add `XCBPrivateKey.publicKey` getters
 - Fix `window.ethereum` always being non-null, even if no provider is available
 
 ## 2.1.4
@@ -25,7 +25,7 @@
 
 ## 2.1.3
 
-- Fix `EthPrivateKey.createRandom` sometimes failing
+- Fix `XCBPrivateKey.createRandom` sometimes failing
 
 ## 2.1.2
 
@@ -35,7 +35,7 @@
 
 ## 2.1.1
 
-- Respect the `value` parameter in `estimateGas`
+- Respect the `value` parameter in `estimateEnergy`
 
 ## 2.1.0
 
@@ -54,7 +54,7 @@
   For background isolates, instead use `runner: await IsolateRunner.spawn()` from `package:isolate`.
 - __Breaking__: Changed `TransactionInformation.r` and `TransactionInformation.s` from `Uint8List` to
   `BigInt`
-- __Breaking__: When not setting the `maxGas` argument, this library will now estimate it instead of using
+- __Breaking__: When not setting the `maxEnergy` argument, this library will now estimate it instead of using
   a fixed upper bound.
 - Migrate to null safety
 - Add `ecRecover` and `isValidSignature` to verify messages. Thanks, [brickpop](https://github.com/brickpop)!
@@ -66,16 +66,16 @@
 
 ## 1.2.3
 
-- include a `0x` for hex data in `eth_estimateGas` - thanks, [@Botary](https://github.com/Botary)
+- include a `0x` for hex data in `xcb_estimateEnergy` - thanks, [@Botary](https://github.com/Botary)
 
 ## 1.2.2
 - Fixed a bug when decoding negative integers ([#73](https://github.com/simolus3/web3dart/issues/73))
 
 ## 1.2.0
-- Added `estimateGas` method on `Web3Client` to estimate the amount of gas that
+- Added `estimateEnergy` method on `Web3Client` to estimate the amount of energy that
   would be used by a transaction.
   
-In 1.2.1, the `atBlock` parameter on `estimateGas` was deprecated and will be ignored.
+In 1.2.1, the `atBlock` parameter on `estimateEnergy` was deprecated and will be ignored.
 
 ## 1.1.1, 1.1.1+1
 - Fix parsing transaction receipts when the block number is not yet available.
@@ -99,11 +99,11 @@ background isolate and terminate all running streams.
 
 This version contains breaking changes! Here is an overview listing some of them.
 
-| Before        | Updated API  |
-| :------------- | -----:|
-| Creating credentials via `Credentials.fromPrivateKeyHex`   | Use the `EthPrivateKey` class or, even better, `client.credentialsFromPrivateKey` |
-| Sending transactions or calling contract functions | The api has been changed to just a single methods instead of a transaction builder. See the examples for details. |
-| Low-level cryptographic operations like signing, hashing and converting hex <-> byte array <-> integer  | Not available in the core library. Import `package:web3dart/crypto.dart` instead |
+| Before                                                                                                 |                                                                                                       Updated API |
+| :----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------: |
+| Creating credentials via `Credentials.fromPrivateKeyHex`                                               |                                 Use the `XCBPrivateKey` class or, even better, `client.credentialsFromPrivateKey` |
+| Sending transactions or calling contract functions                                                     | The api has been changed to just a single methods instead of a transaction builder. See the examples for details. |
+| Low-level cryptographic operations like signing, hashing and converting hex <-> byte array <-> integer |                                  Not available in the core library. Import `package:web3dart/crypto.dart` instead |
 
 If you run into problems after updating, please [create an issue](https://github.com/simolus3/web3dart/issues/new).
 

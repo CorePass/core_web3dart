@@ -25,8 +25,10 @@ class Web3Client {
   /// [httpClient] will be used to send requests to the rpc server.
   /// Am isolate will be used to perform expensive operations, such as signing
   /// transactions or computing private keys.
-  Web3Client(String url, Client httpClient, {SocketConnector? socketConnector})
-      : this.custom(JsonRPC(url, httpClient), socketConnector: socketConnector);
+  Web3Client(String url, Client httpClient, String username, String password,
+      {SocketConnector? socketConnector})
+      : this.custom(JsonRPC(url, httpClient, username, password),
+            socketConnector: socketConnector);
 
   Web3Client.custom(RpcService rpc, {this.socketConnector}) : _jsonRpc = rpc {
     _filters = _FilterEngine(this);
@@ -72,7 +74,7 @@ class Web3Client {
 
     final socket = socketConnector!();
     _streamRpcPeer = rpc.Peer(socket)
-      ..registerMethod('eth_subscription', _filters.handlePubSubNotification);
+      ..registerMethod('xcb_subscription', _filters.handlePubSubNotification);
 
     _streamRpcPeer?.listen().then((_) {
       // .listen() will complete when the socket is closed, so reset client
@@ -88,10 +90,10 @@ class Web3Client {
   }
 
   /// Constructs a new [Credentials] with the provided [privateKey] by using
-  /// an [EthPrivateKey].
-  @Deprecated('Use EthPrivateKey.fromHex instead')
-  Future<EthPrivateKey> credentialsFromPrivateKey(String privateKey) {
-    return Future.value(EthPrivateKey.fromHex(privateKey));
+  /// an [XCBPrivateKey].
+  @Deprecated('Use XCBPrivateKey.fromHex instead')
+  Future<XCBPrivateKey> credentialsFromPrivateKey(String privateKey) {
+    return Future.value(XCBPrivateKey.fromHex(privateKey));
   }
 
   /// Returns the version of the client we're sending requests to.
@@ -112,9 +114,10 @@ class Web3Client {
     return _makeRPCCall<String>('net_version').then(int.parse);
   }
 
-  Future<BigInt> getChainId() {
-    return _makeRPCCall<String>('eth_chainId').then(BigInt.parse);
-  }
+  // Future<int> getChainId() {
+  //   return _makeRPCCall<String>('xcb_networkId')
+  //       .then((val) => BigInt.parse(val).toInt());
+  // }
 
   /// Returns true if the node is actively listening for network connections.
   Future<bool> isListeningForNetwork() {
@@ -129,7 +132,7 @@ class Web3Client {
 
   /// Returns the version of the Ethereum-protocol the client is using.
   Future<int> getEtherProtocolVersion() async {
-    final hex = await _makeRPCCall<String>('eth_protocolVersion');
+    final hex = await _makeRPCCall<String>('xcb_protocolVersion');
     return hexToInt(hex).toInt();
   }
 
@@ -138,7 +141,7 @@ class Web3Client {
   ///
   /// If so, progress information is returned via [SyncInformation].
   Future<SyncInformation> getSyncStatus() async {
-    final data = await _makeRPCCall<dynamic>('eth_syncing');
+    final data = await _makeRPCCall<dynamic>('xcb_syncing');
 
     if (data is Map) {
       final startingBlock = hexToInt(data['startingBlock'] as String).toInt();
@@ -151,42 +154,42 @@ class Web3Client {
     }
   }
 
-  Future<EthereumAddress> coinbaseAddress() async {
-    final hex = await _makeRPCCall<String>('eth_coinbase');
-    return EthereumAddress.fromHex(hex);
+  Future<XCBAddress> coinbaseAddress() async {
+    final hex = await _makeRPCCall<String>('xcb_coinbase');
+    return XCBAddress.fromHex(hex);
   }
 
   /// Returns true if the connected client is currently mining, false if not.
   Future<bool> isMining() {
-    return _makeRPCCall('eth_mining');
+    return _makeRPCCall('xcb_mining');
   }
 
   /// Returns the amount of hashes per second the connected node is mining with.
   Future<int> getMiningHashrate() {
-    return _makeRPCCall<String>('eth_hashrate')
+    return _makeRPCCall<String>('xcb_hashrate')
         .then((s) => hexToInt(s).toInt());
   }
 
-  /// Returns the amount of Ether typically needed to pay for one unit of gas.
+  /// Returns the amount of Ether typically needed to pay for one unit of energy.
   ///
   /// Although not strictly defined, this value will typically be a sensible
   /// amount to use.
-  Future<EtherAmount> getGasPrice() async {
-    final data = await _makeRPCCall<String>('eth_gasPrice');
+  Future<XCBAmount> getEnergyPrice() async {
+    final data = await _makeRPCCall<String>('xcb_energyPrice');
 
-    return EtherAmount.fromUnitAndValue(EtherUnit.wei, hexToInt(data));
+    return XCBAmount.fromUnitAndValue(XCBUnit.ore, hexToInt(data));
   }
 
   /// Returns the number of the most recent block on the chain.
   Future<int> getBlockNumber() {
-    return _makeRPCCall<String>('eth_blockNumber')
+    return _makeRPCCall<String>('xcb_blockNumber')
         .then((s) => hexToInt(s).toInt());
   }
 
   Future<BlockInformation> getBlockInformation(
       {String blockNumber = 'latest', bool isContainFullObj = true}) {
     return _makeRPCCall<Map<String, dynamic>>(
-            'eth_getBlockByNumber', [blockNumber, isContainFullObj])
+            'xcb_getBlockByNumber', [blockNumber, isContainFullObj])
         .then((json) => BlockInformation.fromJson(json));
   }
 
@@ -194,26 +197,26 @@ class Web3Client {
   ///
   /// This function allows specifying a custom block mined in the past to get
   /// historical data. By default, [BlockNum.current] will be used.
-  Future<EtherAmount> getBalance(EthereumAddress address, {BlockNum? atBlock}) {
+  Future<XCBAmount> getBalance(XCBAddress address, {BlockNum? atBlock}) {
     final blockParam = _getBlockParam(atBlock);
 
-    return _makeRPCCall<String>('eth_getBalance', [address.hex, blockParam])
+    return _makeRPCCall<String>('xcb_getBalance', [address.hex, blockParam])
         .then((data) {
-      return EtherAmount.fromUnitAndValue(EtherUnit.wei, hexToInt(data));
+      return XCBAmount.fromUnitAndValue(XCBUnit.ore, hexToInt(data));
     });
   }
 
   /// Gets an element from the storage of the contract with the specified
   /// [address] at the specified [position].
-  /// See https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getstorageat for
+  /// See https://github.com/ethereum/wiki/wiki/JSON-RPC#xcb_getstorageat for
   /// more details.
   /// This function allows specifying a custom block mined in the past to get
   /// historical data. By default, [BlockNum.current] will be used.
-  Future<Uint8List> getStorage(EthereumAddress address, BigInt position,
+  Future<Uint8List> getStorage(XCBAddress address, BigInt position,
       {BlockNum? atBlock}) {
     final blockParam = _getBlockParam(atBlock);
 
-    return _makeRPCCall<String>('eth_getStorageAt', [
+    return _makeRPCCall<String>('xcb_getStorageAt', [
       address.hex,
       '0x${position.toRadixString(16)}',
       blockParam
@@ -224,12 +227,11 @@ class Web3Client {
   ///
   /// This function allows specifying a custom block mined in the past to get
   /// historical data. By default, [BlockNum.current] will be used.
-  Future<int> getTransactionCount(EthereumAddress address,
-      {BlockNum? atBlock}) {
+  Future<int> getTransactionCount(XCBAddress address, {BlockNum? atBlock}) {
     final blockParam = _getBlockParam(atBlock);
 
     return _makeRPCCall<String>(
-            'eth_getTransactionCount', [address.hex, blockParam])
+            'xcb_getTransactionCount', [address.hex, blockParam])
         .then((hex) => hexToInt(hex).toInt());
   }
 
@@ -237,14 +239,14 @@ class Web3Client {
   /// [transactionHash].
   Future<TransactionInformation> getTransactionByHash(String transactionHash) {
     return _makeRPCCall<Map<String, dynamic>>(
-            'eth_getTransactionByHash', [transactionHash])
+            'xcb_getTransactionByHash', [transactionHash])
         .then((s) => TransactionInformation.fromMap(s));
   }
 
   /// Returns an receipt of a transaction based on its hash.
   Future<TransactionReceipt?> getTransactionReceipt(String hash) {
     return _makeRPCCall<Map<String, dynamic>?>(
-            'eth_getTransactionReceipt', [hash])
+            'xcb_getTransactionReceipt', [hash])
         .then((s) => s != null ? TransactionReceipt.fromMap(s) : null);
   }
 
@@ -252,20 +254,20 @@ class Web3Client {
   ///
   /// This function allows specifying a custom block mined in the past to get
   /// historical data. By default, [BlockNum.current] will be used.
-  Future<Uint8List> getCode(EthereumAddress address, {BlockNum? atBlock}) {
+  Future<Uint8List> getCode(XCBAddress address, {BlockNum? atBlock}) {
     return _makeRPCCall<String>(
-        'eth_getCode', [address.hex, _getBlockParam(atBlock)]).then(hexToBytes);
+        'xcb_getCode', [address.hex, _getBlockParam(atBlock)]).then(hexToBytes);
   }
 
   /// Returns all logs matched by the filter in [options].
   ///
   /// See also:
   ///  - [events], which can be used to obtain a stream of log events
-  ///  - https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getlogs
+  ///  - https://github.com/ethereum/wiki/wiki/JSON-RPC#xcb_getlogs
   Future<List<FilterEvent>> getLogs(FilterOptions options) {
     final filter = _EventFilter(options);
     return _makeRPCCall<List<dynamic>>(
-        'eth_getLogs', [filter._createParamsObject(true)]).then((logs) {
+        'xcb_getLogs', [filter._createParamsObject(true)]).then((logs) {
       return logs.map(filter.parseChanges).toList();
     });
   }
@@ -276,14 +278,16 @@ class Web3Client {
   /// Returns a hash of the transaction which, after the transaction has been
   /// included in a mined block, can be used to obtain detailed information
   /// about the transaction.
-  Future<String> sendTransaction(Credentials cred, Transaction transaction,
-      {int? chainId = 1, bool fetchChainIdFromNetworkId = false}) async {
-    if (cred is CustomTransactionSender) {
-      return cred.sendTransaction(transaction);
-    }
-
-    var signed = await signTransaction(cred, transaction,
-        chainId: chainId, fetchChainIdFromNetworkId: fetchChainIdFromNetworkId);
+  Future<String> sendTransaction(
+    Credentials cred,
+    Transaction transaction, {
+    required int networkId,
+  }) async {
+    var signed = await signTransaction(
+      cred,
+      transaction,
+      networkId: networkId,
+    );
 
     if (transaction.isEIP1559) {
       signed = prependTransactionType(0x02, signed);
@@ -300,7 +304,7 @@ class Web3Client {
   /// included in a mined block, can be used to obtain detailed information
   /// about the transaction.
   Future<String> sendRawTransaction(Uint8List signedTransaction) async {
-    return _makeRPCCall('eth_sendRawTransaction', [
+    return _makeRPCCall('xcb_sendRawTransaction', [
       bytesToHex(signedTransaction, include0x: true, padToEvenLength: true)
     ]);
   }
@@ -311,18 +315,20 @@ class Web3Client {
   /// See also:
   ///  - [bytesToHex], which can be used to get the more common hexadecimal
   /// representation of the transaction.
-  Future<Uint8List> signTransaction(Credentials cred, Transaction transaction,
-      {int? chainId = 1, bool fetchChainIdFromNetworkId = false}) async {
+  Future<Uint8List> signTransaction(
+    Credentials cred,
+    Transaction transaction, {
+    required int networkId,
+  }) async {
     final signingInput = await _fillMissingData(
       credentials: cred,
       transaction: transaction,
-      chainId: chainId,
-      loadChainIdFromNetwork: fetchChainIdFromNetworkId,
+      networkId: networkId,
       client: this,
     );
 
     return _signTransaction(signingInput.transaction, signingInput.credentials,
-        signingInput.chainId);
+        BigInt.from(signingInput.networkId));
   }
 
   /// Calls a [function] defined in the smart [contract] and returns it's
@@ -338,7 +344,7 @@ class Web3Client {
   /// This function allows specifying a custom block mined in the past to get
   /// historical data. By default, [BlockNum.current] will be used.
   Future<List<dynamic>> call({
-    EthereumAddress? sender,
+    XCBAddress? sender,
     required DeployedContract contract,
     required ContractFunction function,
     required List<dynamic> params,
@@ -354,35 +360,37 @@ class Web3Client {
     return function.decodeReturnValues(encodedResult);
   }
 
-  /// Estimate the amount of gas that would be necessary if the transaction was
+  /// Estimate the amount of energy that would be necessary if the transaction was
   /// sent via [sendTransaction]. Note that the estimate may be significantly
-  /// higher than the amount of gas actually used by the transaction.
-  Future<BigInt> estimateGas({
-    EthereumAddress? sender,
-    EthereumAddress? to,
-    EtherAmount? value,
-    BigInt? amountOfGas,
-    EtherAmount? gasPrice,
-    EtherAmount? maxPriorityFeePerGas,
-    EtherAmount? maxFeePerGas,
+  /// higher than the amount of energy actually used by the transaction.
+  Future<BigInt> estimateEnergy({
+    XCBAddress? sender,
+    XCBAddress? to,
+    XCBAmount? value,
+    BigInt? amountOfEnergy,
+    XCBAmount? energyPrice,
+    XCBAmount? maxPriorityFeePerEnergy,
+    XCBAmount? maxFeePerEnergy,
     Uint8List? data,
     @Deprecated('Parameter is ignored') BlockNum? atBlock,
   }) async {
     final amountHex = await _makeRPCCall<String>(
-      'eth_estimateGas',
+      'xcb_estimateEnergy',
       [
         {
           if (sender != null) 'from': sender.hex,
           if (to != null) 'to': to.hex,
-          if (amountOfGas != null) 'gas': '0x${amountOfGas.toRadixString(16)}',
-          if (gasPrice != null)
-            'gasPrice': '0x${gasPrice.getInWei.toRadixString(16)}',
-          if (maxPriorityFeePerGas != null)
-            'maxPriorityFeePerGas':
-                '0x${maxPriorityFeePerGas.getInWei.toRadixString(16)}',
-          if (maxFeePerGas != null)
-            'maxFeePerGas': '0x${maxFeePerGas.getInWei.toRadixString(16)}',
-          if (value != null) 'value': '0x${value.getInWei.toRadixString(16)}',
+          if (amountOfEnergy != null)
+            'energy': '0x${amountOfEnergy.toRadixString(16)}',
+          if (energyPrice != null)
+            'energyPrice': '0x${energyPrice.getInOre.toRadixString(16)}',
+          if (maxPriorityFeePerEnergy != null)
+            'maxPriorityFeePerEnergy':
+                '0x${maxPriorityFeePerEnergy.getInOre.toRadixString(16)}',
+          if (maxFeePerEnergy != null)
+            'maxFeePerEnergy':
+                '0x${maxFeePerEnergy.getInOre.toRadixString(16)}',
+          if (value != null) 'value': '0x${value.getInOre.toRadixString(16)}',
           if (data != null) 'data': bytesToHex(data, include0x: true),
         },
       ],
@@ -406,8 +414,8 @@ class Web3Client {
   /// - [call], which automatically encodes function parameters and parses a
   /// response.
   Future<String> callRaw({
-    EthereumAddress? sender,
-    required EthereumAddress contract,
+    XCBAddress? sender,
+    required XCBAddress contract,
     required Uint8List data,
     BlockNum? atBlock,
   }) {
@@ -417,7 +425,7 @@ class Web3Client {
       if (sender != null) 'from': sender.hex,
     };
 
-    return _makeRPCCall<String>('eth_call', [call, _getBlockParam(atBlock)]);
+    return _makeRPCCall<String>('xcb_call', [call, _getBlockParam(atBlock)]);
   }
 
   /// Listens for new blocks that are added to the chain. The stream will emit

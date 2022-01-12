@@ -1,0 +1,4 @@
+String CONTRACT_ADDRESS = "cb544803a5145b1523e28319f09a656cc933b45c950f";
+String blockChainURL = "http://192.168.1.118:8545";
+String privateKey =
+    "0xe6159b2a38dbbe289b2000354035bc864b3d53b7af9a5967449c167eb4144b6efafabd2f66f93d445d2fb49b515c6509ceb9d50b99dd8084ef";

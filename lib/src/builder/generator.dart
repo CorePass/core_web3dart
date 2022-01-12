@@ -154,7 +154,7 @@ class _ContractGeneration {
       ..optionalParameters.addAll([
         Parameter((b) => b
           ..name = 'address'
-          ..type = ethereumAddress
+          ..type = XCBAddress
           ..named = true
           ..required = true),
         Parameter((b) => b
@@ -163,7 +163,7 @@ class _ContractGeneration {
           ..named = true
           ..required = true),
         Parameter((b) => b
-          ..name = 'chainId'
+          ..name = 'networkId'
           ..type = dartInt.rebuild((b) => b.isNullable = true)
           ..required = false
           ..named = true),
@@ -174,7 +174,7 @@ class _ContractGeneration {
           refer('address'),
         ]),
         refer('client'),
-        refer('chainId'),
+        refer('networkId'),
       ]).code);
   }
 
@@ -224,7 +224,7 @@ class _ContractGeneration {
     } else {
       b.docs.add('''
 /// The optional [transaction] parameter can be used to override parameters
-/// like the gas price, nonce and max gas. The `data` and `to` fields will be
+/// like the energy price, nonce and max energy. The `data` and `to` fields will be
 /// set by the contract.''');
     }
   }

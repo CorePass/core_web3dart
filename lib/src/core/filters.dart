@@ -27,7 +27,7 @@ class _NewBlockFilter extends _Filter<String> {
 
   @override
   _FilterCreationParams create() {
-    return _FilterCreationParams('eth_newBlockFilter', []);
+    return _FilterCreationParams('xcb_newBlockFilter', []);
   }
 
   @override
@@ -49,7 +49,7 @@ class _PendingTransactionsFilter extends _Filter<String> {
 
   @override
   _FilterCreationParams create() {
-    return _FilterCreationParams('eth_newPendingTransactionFilter', []);
+    return _FilterCreationParams('xcb_newPendingTransactionFilter', []);
   }
 
   @override
@@ -94,7 +94,7 @@ class FilterOptions {
   /// The optional address to limit this filter to. If not null, only logs
   /// emitted from the contract at [address] will be considered. Otherwise, all
   /// log events will be reported.
-  final EthereumAddress? address;
+  final XCBAddress? address;
 
   /// The topics that must be present in the event to be included in this
   /// filter. The topics must be represented as a hexadecimal value prefixed
@@ -148,7 +148,7 @@ class FilterEvent {
         blockNum = log['blockNumber'] != null
             ? hexToInt(log['blockNumber'] as String).toInt()
             : null,
-        address = EthereumAddress.fromHex(log['address'] as String),
+        address = XCBAddress.fromHex(log['address'] as String),
         data = log['data'] as String?,
         topics = (log['topics'] as List?)?.cast<String>();
 
@@ -175,7 +175,7 @@ class FilterEvent {
   final int? blockNum;
 
   /// The address (of the smart contract) from which this log originated.
-  final EthereumAddress? address;
+  final XCBAddress? address;
 
   /// The data blob of this log, hex-encoded.
   ///
@@ -240,7 +240,7 @@ class _EventFilter extends _Filter<FilterEvent> {
 
   @override
   _FilterCreationParams create() {
-    return _FilterCreationParams('eth_newFilter', [_createParamsObject(true)]);
+    return _FilterCreationParams('xcb_newFilter', [_createParamsObject(true)]);
   }
 
   @override
@@ -263,9 +263,7 @@ class _EventFilter extends _Filter<FilterEvent> {
       encodedOptions['address'] = options.address?.hex;
     }
     if (options.topics != null) {
-      final topics = <dynamic>[];
-      options.topics?.forEach((e) => topics.add(e.isEmpty ? null : e));
-      encodedOptions['topics'] = topics;
+      encodedOptions['topics'] = options.topics;
     }
 
     return encodedOptions;
@@ -334,7 +332,7 @@ class _FilterEngine {
     final peer = _client._connectWithPeer();
 
     try {
-      final response = await peer?.sendRequest('eth_subscribe', params.params);
+      final response = await peer?.sendRequest('xcb_subscribe', params.params);
       filter.id = response as String;
     } on rpc.RpcException catch (e, s) {
       filter._controller.addError(e, s);
@@ -356,7 +354,7 @@ class _FilterEngine {
 
       for (final filter in filterSnapshot) {
         final updatedData =
-            await _rpc.call('eth_getFilterChanges', [filter.id]);
+            await _rpc.call('xcb_getFilterChanges', [filter.id]);
 
         for (final payload in updatedData.result) {
           if (!filter._controller.isClosed) {
@@ -400,9 +398,9 @@ class _FilterEngine {
 
     if (filter.isPubSub && !_clearingBecauseSocketClosed) {
       final connection = _client._connectWithPeer();
-      await connection?.sendRequest('eth_unsubscribe', [filter.id]);
+      await connection?.sendRequest('xcb_unsubscribe', [filter.id]);
     } else {
-      await _rpc.call('eth_uninstallFilter', [filter.id]);
+      await _rpc.call('xcb_uninstallFilter', [filter.id]);
     }
   }
 

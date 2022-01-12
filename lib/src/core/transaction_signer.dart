@@ -2,78 +2,70 @@ part of 'package:web3dart/web3dart.dart';
 
 class _SigningInput {
   _SigningInput(
-      {required this.transaction, required this.credentials, this.chainId});
+      {required this.transaction,
+      required this.credentials,
+      required this.networkId});
 
   final Transaction transaction;
   final Credentials credentials;
-  final int? chainId;
+  final int networkId;
 }
 
 Future<_SigningInput> _fillMissingData({
   required Credentials credentials,
   required Transaction transaction,
-  int? chainId,
-  bool loadChainIdFromNetwork = false,
+  required int networkId,
   Web3Client? client,
 }) async {
-  if (loadChainIdFromNetwork && chainId != null) {
-    throw ArgumentError(
-        "You can't specify loadChainIdFromNetwork and specify a custom chain id!");
-  }
-
-  final sender = transaction.from ?? await credentials.extractAddress();
-  var gasPrice = transaction.gasPrice;
+  final sender =
+      transaction.from ?? await credentials.extractAddress(networkId);
+  var energyPrice = transaction.energyPrice;
 
   if (client == null &&
       (transaction.nonce == null ||
-          transaction.maxGas == null ||
-          loadChainIdFromNetwork ||
-          (!transaction.isEIP1559 && gasPrice == null))) {
+          transaction.maxEnergy == null ||
+          (!transaction.isEIP1559 && energyPrice == null))) {
     throw ArgumentError('Client is required to perform network actions');
   }
 
-  if (!transaction.isEIP1559 && gasPrice == null) {
-    gasPrice = await client!.getGasPrice();
+  if (!transaction.isEIP1559 && energyPrice == null) {
+    energyPrice = await client!.getEnergyPrice();
   }
 
   final nonce = transaction.nonce ??
       await client!
           .getTransactionCount(sender, atBlock: const BlockNum.pending());
 
-  final maxGas = transaction.maxGas ??
+  final maxEnergy = transaction.maxEnergy ??
       await client!
-          .estimateGas(
+          .estimateEnergy(
             sender: sender,
             to: transaction.to,
             data: transaction.data,
             value: transaction.value,
-            gasPrice: gasPrice,
-            maxPriorityFeePerGas: transaction.maxPriorityFeePerGas,
-            maxFeePerGas: transaction.maxFeePerGas,
+            energyPrice: energyPrice,
+            maxPriorityFeePerEnergy: transaction.maxPriorityFeePerEnergy,
+            maxFeePerEnergy: transaction.maxFeePerEnergy,
           )
           .then((bigInt) => bigInt.toInt());
 
   // apply default values to null fields
   final modifiedTransaction = transaction.copyWith(
-    value: transaction.value ?? EtherAmount.zero(),
-    maxGas: maxGas,
+    value: transaction.value ?? XCBAmount.zero(),
+    maxEnergy: maxEnergy,
     from: sender,
     data: transaction.data ?? Uint8List(0),
-    gasPrice: gasPrice,
+    energyPrice: energyPrice,
     nonce: nonce,
   );
 
   int resolvedChainId;
-  if (!loadChainIdFromNetwork) {
-    resolvedChainId = chainId!;
-  } else {
-    resolvedChainId = await client!.getNetworkId();
-  }
+  resolvedChainId = networkId;
 
   return _SigningInput(
     transaction: modifiedTransaction,
     credentials: credentials,
-    chainId: resolvedChainId,
+    networkId: resolvedChainId,
   );
 }
 
@@ -84,38 +76,28 @@ Uint8List prependTransactionType(int type, Uint8List transaction) {
 }
 
 Future<Uint8List> _signTransaction(
-    Transaction transaction, Credentials c, int? chainId) async {
-  if (transaction.isEIP1559 && chainId != null) {
-    final encodedTx = LengthTrackingByteSink();
-    encodedTx.addByte(0x02);
-    encodedTx.add(rlp
-        .encode(_encodeEIP1559ToRlp(transaction, null, BigInt.from(chainId))));
+    Transaction transaction, Credentials c, BigInt networkId) async {
+  final _enRlp = _encodeRawToRlp(transaction, networkId);
 
-    encodedTx.close();
-    final signature = await c.signToSignature(encodedTx.asBytes(),
-        chainId: chainId, isEIP1559: transaction.isEIP1559);
+  final _enLp = rlp.encode(_enRlp);
+  final encoded = uint8ListFromList(_enLp);
+  final signature =
+      await c.signToSignature(encoded, networkId: networkId.toInt());
+  final _sigEnRlp = _encodeToRlp(transaction, signature, networkId);
+  print(_sigEnRlp.toString());
+  final _sigLp = rlp.encode(_sigEnRlp);
+  final _res = uint8ListFromList(_sigLp);
 
-    return uint8ListFromList(rlp.encode(
-        _encodeEIP1559ToRlp(transaction, signature, BigInt.from(chainId))));
-  }
-  final innerSignature =
-      chainId == null ? null : MsgSignature(BigInt.zero, BigInt.zero, chainId);
-
-  final encoded =
-      uint8ListFromList(rlp.encode(_encodeToRlp(transaction, innerSignature)));
-  final signature = await c.signToSignature(encoded, chainId: chainId);
-
-  return uint8ListFromList(rlp.encode(_encodeToRlp(transaction, signature)));
+  return _res;
 }
 
-List<dynamic> _encodeEIP1559ToRlp(
-    Transaction transaction, MsgSignature? signature, BigInt chainId) {
+List<dynamic> _encodeToRlp(
+    Transaction transaction, Uint8List signature, BigInt networkId) {
   final list = [
-    chainId,
-    transaction.nonce,
-    transaction.maxPriorityFeePerGas!.getInWei,
-    transaction.maxFeePerGas!.getInWei,
-    transaction.maxGas,
+    transaction.nonce ?? 0,
+    transaction.energyPrice?.getInOre ?? 0,
+    transaction.maxEnergy ?? 0,
+    networkId
   ];
 
   if (transaction.to != null) {
@@ -125,26 +107,19 @@ List<dynamic> _encodeEIP1559ToRlp(
   }
 
   list
-    ..add(transaction.value?.getInWei)
-    ..add(transaction.data);
+    ..add(transaction.value?.getInOre ?? 0)
+    ..add(transaction.data ?? 0);
 
-  list.add([]); // access list
-
-  if (signature != null) {
-    list
-      ..add(signature.v)
-      ..add(signature.r)
-      ..add(signature.s);
-  }
+  list..add(signature);
 
   return list;
 }
 
-List<dynamic> _encodeToRlp(Transaction transaction, MsgSignature? signature) {
+List<dynamic> _encodeRawToRlp(Transaction transaction, BigInt networkId) {
   final list = [
-    transaction.nonce,
-    transaction.gasPrice?.getInWei,
-    transaction.maxGas,
+    transaction.nonce ?? 0,
+    transaction.energyPrice?.getInOre ?? 0,
+    transaction.maxEnergy ?? 0,
   ];
 
   if (transaction.to != null) {
@@ -152,17 +127,9 @@ List<dynamic> _encodeToRlp(Transaction transaction, MsgSignature? signature) {
   } else {
     list.add('');
   }
-
   list
-    ..add(transaction.value?.getInWei)
-    ..add(transaction.data);
-
-  if (signature != null) {
-    list
-      ..add(signature.v)
-      ..add(signature.r)
-      ..add(signature.s);
-  }
-
+    ..add(transaction.value?.getInOre ?? 0)
+    ..add(transaction.data ?? 0)
+    ..add(networkId);
   return list;
 }

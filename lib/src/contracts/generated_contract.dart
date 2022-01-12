@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 
 import '../../crypto.dart';
 import '../../web3dart.dart';
+import 'deployed_contract.dart';
 
 /// Base classes for generated contracts.
 ///
@@ -10,9 +11,9 @@ import '../../web3dart.dart';
 abstract class GeneratedContract {
   final DeployedContract self;
   final Web3Client client;
-  final int? chainId;
+  final int networkId;
 
-  GeneratedContract(this.self, this.client, this.chainId);
+  GeneratedContract(this.self, this.client, this.networkId);
 
   /// Returns whether the [function] has the [expected] selector.
   ///
@@ -30,8 +31,12 @@ abstract class GeneratedContract {
   }
 
   @protected
-  Future<String> write(Credentials credentials, Transaction? base,
-      ContractFunction function, List<dynamic> parameters) {
+  Future<String> write(
+    Credentials credentials,
+    Transaction? base,
+    ContractFunction function,
+    List<dynamic> parameters,
+  ) {
     final transaction = base?.copyWith(
           data: function.encodeCall(parameters),
           to: self.address,
@@ -39,7 +44,10 @@ abstract class GeneratedContract {
         Transaction.callContract(
             contract: self, function: function, parameters: parameters);
 
-    return client.sendTransaction(credentials, transaction,
-        chainId: chainId, fetchChainIdFromNetworkId: chainId == null);
+    return client.sendTransaction(
+      credentials,
+      transaction,
+      networkId: networkId,
+    );
   }
 }

@@ -9,18 +9,17 @@ final _contractAbi = _i1.ContractAbi.fromJson(
 /// Interface of the ERC20 standard as defined in the EIP.
 class Erc20 extends _i1.GeneratedContract {
   Erc20(
-      {required _i1.EthereumAddress address,
+      {required _i1.XCBAddress address,
       required _i1.Web3Client client,
-      int? chainId})
-      : super(_i1.DeployedContract(_contractAbi, address), client, chainId);
+      required int networkId})
+      : super(_i1.DeployedContract(_contractAbi, address), client, networkId);
 
   /// Returns the remaining number of tokens that [spender] will be allowed to spend on behalf of [owner] through [transferFrom]. This is zero by default. This value changes when [approve] or [transferFrom] are called.
   ///
   /// The optional [atBlock] parameter can be used to view historical data. When
   /// set, the function will be evaluated in the specified block. By default, the
   /// latest on-chain block will be used.
-  Future<BigInt> allowance(
-      _i1.EthereumAddress owner, _i1.EthereumAddress spender,
+  Future<BigInt> allowance(_i1.XCBAddress owner, _i1.XCBAddress spender,
       {_i1.BlockNum? atBlock}) async {
     final function = self.abi.functions[0];
     assert(checkSignature(function, 'dd62ed3e'));
@@ -32,9 +31,9 @@ class Erc20 extends _i1.GeneratedContract {
   /// Sets [amount] as the allowance of [spender] over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an [Approval] event.
   ///
   /// The optional [transaction] parameter can be used to override parameters
-  /// like the gas price, nonce and max gas. The `data` and `to` fields will be
+  /// like the energy price, nonce and max energy. The `data` and `to` fields will be
   /// set by the contract.
-  Future<String> approve(_i1.EthereumAddress spender, BigInt amount,
+  Future<String> approve(_i1.XCBAddress spender, BigInt amount,
       {required _i1.Credentials credentials,
       _i1.Transaction? transaction}) async {
     final function = self.abi.functions[1];
@@ -48,7 +47,7 @@ class Erc20 extends _i1.GeneratedContract {
   /// The optional [atBlock] parameter can be used to view historical data. When
   /// set, the function will be evaluated in the specified block. By default, the
   /// latest on-chain block will be used.
-  Future<BigInt> balanceOf(_i1.EthereumAddress account,
+  Future<BigInt> balanceOf(_i1.XCBAddress account,
       {_i1.BlockNum? atBlock}) async {
     final function = self.abi.functions[2];
     assert(checkSignature(function, '70a08231'));
@@ -73,9 +72,9 @@ class Erc20 extends _i1.GeneratedContract {
   /// Moves [amount] tokens from the caller's account to [recipient]. Returns a boolean value indicating whether the operation succeeded. Emits a [Transfer] event.
   ///
   /// The optional [transaction] parameter can be used to override parameters
-  /// like the gas price, nonce and max gas. The `data` and `to` fields will be
+  /// like the energy price, nonce and max energy. The `data` and `to` fields will be
   /// set by the contract.
-  Future<String> transfer(_i1.EthereumAddress recipient, BigInt amount,
+  Future<String> transfer(_i1.XCBAddress recipient, BigInt amount,
       {required _i1.Credentials credentials,
       _i1.Transaction? transaction}) async {
     final function = self.abi.functions[4];
@@ -87,10 +86,10 @@ class Erc20 extends _i1.GeneratedContract {
   /// Moves [amount] tokens from [sender] to [recipient] using the allowance mechanism. [amount] is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a [Transfer] event.
   ///
   /// The optional [transaction] parameter can be used to override parameters
-  /// like the gas price, nonce and max gas. The `data` and `to` fields will be
+  /// like the energy price, nonce and max energy. The `data` and `to` fields will be
   /// set by the contract.
   Future<String> transferFrom(
-      _i1.EthereumAddress sender, _i1.EthereumAddress recipient, BigInt amount,
+      _i1.XCBAddress sender, _i1.XCBAddress recipient, BigInt amount,
       {required _i1.Credentials credentials,
       _i1.Transaction? transaction}) async {
     final function = self.abi.functions[5];
@@ -127,13 +126,13 @@ class Erc20 extends _i1.GeneratedContract {
 /// Emitted when the allowance of a [spender] for an [owner] is set by a call to [Erc20.approve]. [value] is the new allowance.
 class Approval {
   Approval(List<dynamic> response)
-      : owner = (response[0] as _i1.EthereumAddress),
-        spender = (response[1] as _i1.EthereumAddress),
+      : owner = (response[0] as _i1.XCBAddress),
+        spender = (response[1] as _i1.XCBAddress),
         value = (response[2] as BigInt);
 
-  final _i1.EthereumAddress owner;
+  final _i1.XCBAddress owner;
 
-  final _i1.EthereumAddress spender;
+  final _i1.XCBAddress spender;
 
   final BigInt value;
 }
@@ -141,13 +140,13 @@ class Approval {
 /// Emitted when [value] tokens are moved from one account ([from]) to another ([to]). Note that [value] may be zero.
 class Transfer {
   Transfer(List<dynamic> response)
-      : from = (response[0] as _i1.EthereumAddress),
-        to = (response[1] as _i1.EthereumAddress),
+      : from = (response[0] as _i1.XCBAddress),
+        to = (response[1] as _i1.XCBAddress),
         value = (response[2] as BigInt);
 
-  final _i1.EthereumAddress from;
+  final _i1.XCBAddress from;
 
-  final _i1.EthereumAddress to;
+  final _i1.XCBAddress to;
 
   final BigInt value;
 }

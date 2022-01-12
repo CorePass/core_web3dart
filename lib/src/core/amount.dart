@@ -1,50 +1,50 @@
-enum EtherUnit {
-  ///Wei, the smallest and atomic amount of Ether
-  wei,
+enum XCBUnit {
+  ///Ore, the smallest and atomic amount of Core
+  ore,
 
-  ///kwei, 1000 wei
-  kwei,
+  ///fecore, 1000 ore
+  fecore,
 
-  ///Mwei, one million wei
-  mwei,
+  ///Picore, one million ore
+  picore,
 
-  ///Gwei, one billion wei. Typically a reasonable unit to measure gas prices.
-  gwei,
+  ///Nacore, one billion ore. Typically a reasonable unit to measure energy prices.
+  nacore,
 
-  ///szabo, 10^12 wei or 1 μEther
-  szabo,
+  ///Μcore, 10^12 ore or 1 μCore
+  mcore,
 
-  ///finney, 10^15 wei or 1 mEther
-  finney,
+  ///micore, 10^15 ore or 1 mcore
+  micore,
 
-  ether
+  core
 }
 
-/// Utility class to easily convert amounts of Ether into different units of
+/// Utility class to easily convert amounts of Core into different units of
 /// quantities.
-class EtherAmount {
-  static final Map<EtherUnit, BigInt> _factors = {
-    EtherUnit.wei: BigInt.one,
-    EtherUnit.kwei: BigInt.from(10).pow(3),
-    EtherUnit.mwei: BigInt.from(10).pow(6),
-    EtherUnit.gwei: BigInt.from(10).pow(9),
-    EtherUnit.szabo: BigInt.from(10).pow(12),
-    EtherUnit.finney: BigInt.from(10).pow(15),
-    EtherUnit.ether: BigInt.from(10).pow(18)
+class XCBAmount {
+  static final Map<XCBUnit, BigInt> _factors = {
+    XCBUnit.ore: BigInt.one,
+    XCBUnit.fecore: BigInt.from(10).pow(3),
+    XCBUnit.picore: BigInt.from(10).pow(6),
+    XCBUnit.nacore: BigInt.from(10).pow(9),
+    XCBUnit.mcore: BigInt.from(10).pow(12),
+    XCBUnit.micore: BigInt.from(10).pow(15),
+    XCBUnit.core: BigInt.from(10).pow(18)
   };
 
   final BigInt _value;
 
-  BigInt get getInWei => _value;
-  BigInt get getInEther => getValueInUnitBI(EtherUnit.ether);
+  BigInt get getInOre => _value;
+  BigInt get getInCore => getValueInUnitBI(XCBUnit.core);
 
-  const EtherAmount.inWei(this._value);
+  const XCBAmount.inOre(this._value);
 
-  EtherAmount.zero() : this.inWei(BigInt.zero);
+  XCBAmount.zero() : this.inOre(BigInt.zero);
 
-  /// Constructs an amount of Ether by a unit and its amount. [amount] can
+  /// Constructs an amount of Core by a unit and its amount. [amount] can
   /// either be a base10 string, an int, or a BigInt.
-  factory EtherAmount.fromUnitAndValue(EtherUnit unit, dynamic amount) {
+  factory XCBAmount.fromUnitAndValue(XCBUnit unit, dynamic amount) {
     BigInt parsedAmount;
 
     if (amount is BigInt) {
@@ -57,22 +57,22 @@ class EtherAmount {
       throw ArgumentError('Invalid type, must be BigInt, string or int');
     }
 
-    return EtherAmount.inWei(parsedAmount * _factors[unit]!);
+    return XCBAmount.inOre(parsedAmount * _factors[unit]!);
   }
 
   /// Gets the value of this amount in the specified unit as a whole number.
-  /// **WARNING**: For all units except for [EtherUnit.wei], this method will
+  /// **WARNING**: For all units except for [XCBUnit.ore], this method will
   /// discard the remainder occurring in the division, making it unsuitable for
   /// calculations or storage. You should store and process amounts of ether by
   /// using a BigInt storing the amount in wei.
-  BigInt getValueInUnitBI(EtherUnit unit) => _value ~/ _factors[unit]!;
+  BigInt getValueInUnitBI(XCBUnit unit) => _value ~/ _factors[unit]!;
 
   /// Gets the value of this amount in the specified unit. **WARNING**: Due to
   /// rounding errors, the return value of this function is not reliable,
   /// especially for larger amounts or smaller units. While it can be used to
   /// display the amount of ether in a human-readable format, it should not be
   /// used for anything else.
-  num getValueInUnit(EtherUnit unit) {
+  num getValueInUnit(XCBUnit unit) {
     final factor = _factors[unit]!;
     final value = _value ~/ factor;
     final remainder = _value.remainder(factor);
@@ -82,13 +82,13 @@ class EtherAmount {
 
   @override
   String toString() {
-    return 'EtherAmount: $getInWei wei';
+    return 'XCBAmount: $getInOre ore';
   }
 
   @override
-  int get hashCode => getInWei.hashCode;
+  int get hashCode => getInOre.hashCode;
 
   @override
   bool operator ==(dynamic other) =>
-      other is EtherAmount && other.getInWei == getInWei;
+      other is XCBAmount && other.getInOre == getInOre;
 }

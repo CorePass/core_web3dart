@@ -1,139 +1,139 @@
-import 'dart:io';
+// import 'dart:io';
 
-import 'package:http/http.dart';
-import 'package:test/test.dart';
-import 'package:web3dart/crypto.dart';
-import 'package:web3dart/web3dart.dart';
+// import 'package:http/http.dart';
+// import 'package:test/test.dart';
+// import 'package:web3dart/crypto.dart';
+// import 'package:web3dart/web3dart.dart';
 
-const _privateKey1 =
-    '05decd062bf7f0b8b9026c08624ed4aea1a4f4202f25dec63929c916b6717210';
-const _privateKey2 =
-    'ea3f9ce401bc7fc73284bf1dd25603bd13f120fea2a66822b760d2d96c68194d';
+// const _privateKey1 =
+//     '05decd062bf7f0b8b9026c08624ed4aea1a4f4202f25dec63929c916b6717210';
+// const _privateKey2 =
+//     'ea3f9ce401bc7fc73284bf1dd25603bd13f120fea2a66822b760d2d96c68194d';
 
-void main() {
-  late Process ganacheCli;
-  late int rpcPort;
+// void main() {
+//   late Process ganacheCli;
+//   late int rpcPort;
 
-  late EthPrivateKey first;
-  late EthPrivateKey second;
+//   late XCBPrivateKey first;
+//   late XCBPrivateKey second;
 
-  late Web3Client client;
+//   late Web3Client client;
 
-  setUpAll(() async {
-    rpcPort = await _findUnusedPort();
-    print('Starting ganache on port $rpcPort');
+//   setUpAll(() async {
+//     rpcPort = await _findUnusedPort();
+//     print('Starting ganache on port $rpcPort');
 
-    ganacheCli = await Process.start(
-      'ganache-cli',
-      [
-        '--port=$rpcPort',
-        '--account=0x$_privateKey1,100000000000000000000',
-        '--account=0x$_privateKey2,100000000000000000000',
-      ],
-    );
+//     ganacheCli = await Process.start(
+//       'ganache-cli',
+//       [
+//         '--port=$rpcPort',
+//         '--account=0x$_privateKey1,100000000000000000000',
+//         '--account=0x$_privateKey2,100000000000000000000',
+//       ],
+//     );
 
-    print('Waiting for ganache to start up');
-    var connectionAttempts = 0;
-    var successful = false;
-    do {
-      connectionAttempts++;
-      try {
-        await get(Uri.parse('http://127.0.0.1:$rpcPort'));
-        successful = true;
-      } on SocketException {
-        await Future.delayed(const Duration(seconds: 2));
-      }
-    } while (connectionAttempts < 5);
+//     print('Waiting for ganache to start up');
+//     var connectionAttempts = 0;
+//     var successful = false;
+//     do {
+//       connectionAttempts++;
+//       try {
+//         await get(Uri.parse('http://127.0.0.1:$rpcPort'));
+//         successful = true;
+//       } on SocketException {
+//         await Future.delayed(const Duration(seconds: 2));
+//       }
+//     } while (connectionAttempts < 5);
 
-    if (!successful) {
-      throw StateError('ganache did not start up');
-    }
-  });
+//     if (!successful) {
+//       throw StateError('ganache did not start up');
+//     }
+//   });
 
-  tearDownAll(() => ganacheCli.kill());
+//   tearDownAll(() => ganacheCli.kill());
 
-  setUp(() {
-    first = EthPrivateKey(hexToBytes(_privateKey1));
-    second = EthPrivateKey(hexToBytes(_privateKey2));
+//   setUp(() {
+//     first = XCBPrivateKey(hexToBytes(_privateKey1));
+//     second = XCBPrivateKey(hexToBytes(_privateKey2));
 
-    client = Web3Client('http://127.0.0.1:$rpcPort', Client());
-  });
+//     client = Web3Client('http://127.0.0.1:$rpcPort', Client());
+//   });
 
-  tearDown(() => client.dispose());
+//   tearDown(() => client.dispose());
 
-  test('simple transactions', () async {
-    final firstAddress = await first.extractAddress();
-    final secondAddress = await second.extractAddress();
+//   test('simple transactions', () async {
+//     final firstAddress = await first.extractAddress();
+//     final secondAddress = await second.extractAddress();
 
-    final balanceOfFirst = await client.getBalance(firstAddress);
-    final balanceOfSecond = await client.getBalance(secondAddress);
-    final value = BigInt.from(1337);
+//     final balanceOfFirst = await client.getBalance(firstAddress);
+//     final balanceOfSecond = await client.getBalance(secondAddress);
+//     final value = BigInt.from(1337);
 
-    final hash = await client.sendTransaction(
-      first,
-      Transaction(
-        to: secondAddress,
-        value: EtherAmount.inWei(value),
-        gasPrice: EtherAmount.zero(),
-      ),
-    );
+//     final hash = await client.sendTransaction(
+//       first,
+//       Transaction(
+//         to: secondAddress,
+//         value: XCBAmount.inWei(value),
+//         energyPrice: XCBAmount.zero(),
+//       ),
+//     );
 
-    expect((await client.getBalance(firstAddress)).getInWei,
-        balanceOfFirst.getInWei - value);
-    expect((await client.getBalance(secondAddress)).getInWei,
-        balanceOfSecond.getInWei + value);
+//     expect((await client.getBalance(firstAddress)).getInWei,
+//         balanceOfFirst.getInWei - value);
+//     expect((await client.getBalance(secondAddress)).getInWei,
+//         balanceOfSecond.getInWei + value);
 
-    final receipt = await client.getTransactionReceipt(hash);
-    expect(
-      receipt,
-      isA<TransactionReceipt>()
-          .having((e) => e.to, 'to', secondAddress)
-          .having((e) => e.from, 'from', first.address),
-    );
-  });
+//     final receipt = await client.getTransactionReceipt(hash);
+//     expect(
+//       receipt,
+//       isA<TransactionReceipt>()
+//           .having((e) => e.to, 'to', secondAddress)
+//           .having((e) => e.from, 'from', first.address),
+//     );
+//   });
 
-  test('EIP-1559 transactions', () async {
-    final firstAddress = await first.extractAddress();
-    final secondAddress = await second.extractAddress();
+//   test('EIP-1559 transactions', () async {
+//     final firstAddress = await first.extractAddress();
+//     final secondAddress = await second.extractAddress();
 
-    final balanceOfFirst = await client.getBalance(firstAddress);
-    final balanceOfSecond = await client.getBalance(secondAddress);
-    final value = BigInt.from(1337);
+//     final balanceOfFirst = await client.getBalance(firstAddress);
+//     final balanceOfSecond = await client.getBalance(secondAddress);
+//     final value = BigInt.from(1337);
 
-    final hash = await client.sendTransaction(
-      first,
-      Transaction(
-        to: secondAddress,
-        value: EtherAmount.inWei(value),
-        maxFeePerGas: EtherAmount.inWei(BigInt.one),
-        maxPriorityFeePerGas: EtherAmount.inWei(BigInt.two),
-      ),
-    );
+//     final hash = await client.sendTransaction(
+//       first,
+//       Transaction(
+//         to: secondAddress,
+//         value: XCBAmount.inWei(value),
+//         maxFeePerEnergy: XCBAmount.inWei(BigInt.one),
+//         maxPriorityFeePerEnergy: XCBAmount.inWei(BigInt.two),
+//       ),
+//     );
 
-    expect((await client.getBalance(firstAddress)).getInWei,
-        balanceOfFirst.getInWei - value);
-    expect((await client.getBalance(secondAddress)).getInWei,
-        balanceOfSecond.getInWei + value);
+//     expect((await client.getBalance(firstAddress)).getInWei,
+//         balanceOfFirst.getInWei - value);
+//     expect((await client.getBalance(secondAddress)).getInWei,
+//         balanceOfSecond.getInWei + value);
 
-    final receipt = await client.getTransactionReceipt(hash);
-    expect(
-      receipt,
-      isA<TransactionReceipt>()
-          .having((e) => e.to, 'to', secondAddress)
-          .having((e) => e.from, 'from', first.address),
-    );
-  }, skip: 'requires ganache 7.0.0');
+//     final receipt = await client.getTransactionReceipt(hash);
+//     expect(
+//       receipt,
+//       isA<TransactionReceipt>()
+//           .having((e) => e.to, 'to', secondAddress)
+//           .having((e) => e.from, 'from', first.address),
+//     );
+//   }, skip: 'requires ganache 7.0.0');
 
-  test('getTransactionReceipt returns null for unknown transactions', () {
-    expect(client.getTransactionReceipt('0x123'), completion(isNull));
-  });
-}
+//   test('getTransactionReceipt returns null for unknown transactions', () {
+//     expect(client.getTransactionReceipt('0x123'), completion(isNull));
+//   });
+// }
 
-Future<int> _findUnusedPort() async {
-  // Credits go to https://stackoverflow.com/a/14095888/3260197
-  final socket = await ServerSocket.bind(InternetAddress.anyIPv4, 0);
-  final port = socket.port;
-  await socket.close();
+// Future<int> _findUnusedPort() async {
+//   // Credits go to https://stackoverflow.com/a/14095888/3260197
+//   final socket = await ServerSocket.bind(InternetAddress.anyIPv4, 0);
+//   final port = socket.port;
+//   await socket.close();
 
-  return port;
-}
+//   return port;
+// }

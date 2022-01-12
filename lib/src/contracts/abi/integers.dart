@@ -93,10 +93,10 @@ class UintType extends _IntTypeBase {
 }
 
 /// Solidity address type
-class AddressType extends AbiType<EthereumAddress> {
+class AddressType extends AbiType<XCBAddress> {
   const AddressType();
 
-  static const _paddingLen = sizeUnitBytes - EthereumAddress.addressByteLength;
+  static const _paddingLen = sizeUnitBytes - XCBAddress.addressByteLength;
 
   @override
   EncodingLengthInfo get encodingLength =>
@@ -106,17 +106,17 @@ class AddressType extends AbiType<EthereumAddress> {
   String get name => 'address';
 
   @override
-  void encode(EthereumAddress data, LengthTrackingByteSink buffer) {
+  void encode(XCBAddress data, LengthTrackingByteSink buffer) {
     buffer
       ..add(Uint8List(_paddingLen))
       ..add(data.addressBytes);
   }
 
   @override
-  DecodingResult<EthereumAddress> decode(ByteBuffer buffer, int offset) {
-    final addressBytes = buffer.asUint8List(
-        offset + _paddingLen, EthereumAddress.addressByteLength);
-    return DecodingResult(EthereumAddress(addressBytes), sizeUnitBytes);
+  DecodingResult<XCBAddress> decode(ByteBuffer buffer, int offset) {
+    final addressBytes =
+        buffer.asUint8List(offset + _paddingLen, XCBAddress.addressByteLength);
+    return DecodingResult(XCBAddress(addressBytes), sizeUnitBytes);
   }
 
   @override

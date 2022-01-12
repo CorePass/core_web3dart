@@ -2,14 +2,11 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
+import 'package:web3dart/crypto.dart';
 
-import '../crypto/formatting.dart';
-import '../crypto/keccak.dart';
-import '../crypto/secp256k1.dart';
-
-/// Represents an Ethereum address.
+/// Represents an Core Block Chain address.
 @immutable
-class EthereumAddress {
+class XCBAddress {
   static final RegExp _basicAddress =
       RegExp(r'^(0x)?[0-9a-f]{40}', caseSensitive: false);
 
@@ -19,22 +16,21 @@ class EthereumAddress {
   final Uint8List addressBytes;
 
   /// An ethereum address from the raw address bytes.
-  const EthereumAddress(this.addressBytes)
-      : assert(addressBytes.length == addressByteLength);
+  const XCBAddress(this.addressBytes);
 
-  /// Constructs an Ethereum address from a public key. The address is formed by
+  /// Constructs an Core Block Chain address from a public key. The address is formed by
   /// the last 20 bytes of the keccak hash of the public key.
-  factory EthereumAddress.fromPublicKey(Uint8List publicKey) {
-    return EthereumAddress(publicKeyToAddress(publicKey));
+  factory XCBAddress.fromPublicKey(Uint8List publicKey, int networkId) {
+    return XCBAddress(publicKeyToAddress(publicKey, networkId));
   }
 
-  /// Parses an Ethereum address from the hexadecimal representation. The
+  /// Parses an Core Block Chain address from the hexadecimal representation. The
   /// representation must have a length of 20 bytes (or 40 hexadecimal chars),
   /// and can optionally be prefixed with "0x".
   ///
   /// If [enforceEip55] is true or the address has both uppercase and lowercase
   /// chars, the address must be valid according to [EIP 55](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md).
-  factory EthereumAddress.fromHex(String hex, {bool enforceEip55 = false}) {
+  factory XCBAddress.fromHex(String hex, {bool enforceEip55 = false}) {
     if (!_basicAddress.hasMatch(hex)) {
       throw ArgumentError.value(hex, 'address',
           'Must be a hex string with a length of 40, optionally prefixed with "0x"');
@@ -42,12 +38,12 @@ class EthereumAddress {
 
     if (!enforceEip55 &&
         (hex.toUpperCase() == hex || hex.toLowerCase() == hex)) {
-      return EthereumAddress(hexToBytes(hex));
+      return XCBAddress(hexToBytes(hex));
     }
 
     // Validates as of EIP 55, https://ethereum.stackexchange.com/a/1379
     final address = strip0x(hex);
-    final hash = bytesToHex(keccakAscii(address.toLowerCase()));
+    final hash = bytesToHex(sha3Ascii(address.toLowerCase()));
     for (var i = 0; i < 40; i++) {
       // the nth letter should be uppercase if the nth digit of casemap is 1
       final hashedPos = int.parse(hash[i], radix: 16);
@@ -58,7 +54,7 @@ class EthereumAddress {
       }
     }
 
-    return EthereumAddress(hexToBytes(hex));
+    return XCBAddress(hexToBytes(hex));
   }
 
   /// A hexadecimal representation of this address, padded to a length of 40
@@ -77,8 +73,9 @@ class EthereumAddress {
   String get hexEip55 {
     // https://eips.ethereum.org/EIPS/eip-55#implementation
     final hex = hexNo0x.toLowerCase();
-    final hash = bytesToHex(keccakAscii(hexNo0x));
+    final hash = bytesToHex(sha3Ascii(hexNo0x));
 
+// TODO: reasearch this more
     final eip55 = StringBuffer('0x');
     for (var i = 0; i < hex.length; i++) {
       if (int.parse(hash[i], radix: 16) >= 8) {
@@ -97,7 +94,7 @@ class EthereumAddress {
   @override
   bool operator ==(other) {
     return identical(this, other) ||
-        (other is EthereumAddress &&
+        (other is XCBAddress &&
             const ListEquality().equals(addressBytes, other.addressBytes));
   }
 

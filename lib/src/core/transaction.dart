@@ -5,27 +5,27 @@ class Transaction {
   ///
   /// This can be set to null, in which case the client will use the address
   /// belonging to the credentials used to this transaction.
-  final EthereumAddress? from;
+  final XCBAddress? from;
 
   /// The recipient of this transaction, or null for transactions that create a
   /// contract.
-  final EthereumAddress? to;
+  final XCBAddress? to;
 
-  /// The maximum amount of gas to spend.
+  /// The maximum amount of energy to spend.
   ///
-  /// If [maxGas] is `null`, this library will ask the rpc node to estimate a
-  /// reasonable spending via [Web3Client.estimateGas].
+  /// If [maxEnergy] is `null`, this library will ask the rpc node to estimate a
+  /// reasonable spending via [Web3Client.estimateEnergy].
   ///
-  /// Gas that is not used but included in [maxGas] will be returned.
-  final int? maxGas;
+  /// Energy that is not used but included in [maxEnergy] will be returned.
+  final int? maxEnergy;
 
-  /// How much ether to spend on a single unit of gas. Can be null, in which
+  /// How much ether to spend on a single unit of energy. Can be null, in which
   /// case the rpc server will choose this value.
-  final EtherAmount? gasPrice;
+  final XCBAmount? energyPrice;
 
   /// How much ether to send to [to]. This can be null, as some transactions
   /// that call a contracts method won't have to send ether.
-  final EtherAmount? value;
+  final XCBAmount? value;
 
   /// For transactions that call a contract function or create a contract,
   /// contains the hashed function name and the encoded parameters or the
@@ -40,19 +40,19 @@ class Transaction {
   /// have already been sent by [from].
   final int? nonce;
 
-  final EtherAmount? maxPriorityFeePerGas;
-  final EtherAmount? maxFeePerGas;
+  final XCBAmount? maxPriorityFeePerEnergy;
+  final XCBAmount? maxFeePerEnergy;
 
   Transaction(
       {this.from,
       this.to,
-      this.maxGas,
-      this.gasPrice,
+      this.maxEnergy,
+      this.energyPrice,
       this.value,
       this.data,
       this.nonce,
-      this.maxFeePerGas,
-      this.maxPriorityFeePerGas});
+      this.maxFeePerEnergy,
+      this.maxPriorityFeePerEnergy});
 
   /// Constructs a transaction that can be used to call a contract function.
   Transaction.callContract(
@@ -60,37 +60,39 @@ class Transaction {
       required ContractFunction function,
       required List<dynamic> parameters,
       this.from,
-      this.maxGas,
-      this.gasPrice,
+      this.maxEnergy,
+      this.energyPrice,
       this.value,
       this.nonce,
-      this.maxFeePerGas,
-      this.maxPriorityFeePerGas})
+      this.maxFeePerEnergy,
+      this.maxPriorityFeePerEnergy})
       : to = contract.address,
         data = function.encodeCall(parameters);
 
   Transaction copyWith(
-      {EthereumAddress? from,
-      EthereumAddress? to,
-      int? maxGas,
-      EtherAmount? gasPrice,
-      EtherAmount? value,
+      {XCBAddress? from,
+      XCBAddress? to,
+      int? maxEnergy,
+      XCBAmount? energyPrice,
+      XCBAmount? value,
       Uint8List? data,
       int? nonce,
-      EtherAmount? maxPriorityFeePerGas,
-      EtherAmount? maxFeePerGas}) {
+      XCBAmount? maxPriorityFeePerEnergy,
+      XCBAmount? maxFeePerEnergy}) {
     return Transaction(
       from: from ?? this.from,
       to: to ?? this.to,
-      maxGas: maxGas ?? this.maxGas,
-      gasPrice: gasPrice ?? this.gasPrice,
+      maxEnergy: maxEnergy ?? this.maxEnergy,
+      energyPrice: energyPrice ?? this.energyPrice,
       value: value ?? this.value,
       data: data ?? this.data,
       nonce: nonce ?? this.nonce,
-      maxFeePerGas: maxFeePerGas ?? this.maxFeePerGas,
-      maxPriorityFeePerGas: maxPriorityFeePerGas ?? this.maxPriorityFeePerGas,
+      maxFeePerEnergy: maxFeePerEnergy ?? this.maxFeePerEnergy,
+      maxPriorityFeePerEnergy:
+          maxPriorityFeePerEnergy ?? this.maxPriorityFeePerEnergy,
     );
   }
 
-  bool get isEIP1559 => maxFeePerGas != null && maxPriorityFeePerGas != null;
+  bool get isEIP1559 =>
+      maxFeePerEnergy != null && maxPriorityFeePerEnergy != null;
 }

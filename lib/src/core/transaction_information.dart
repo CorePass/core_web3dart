@@ -6,22 +6,19 @@ class TransactionInformation {
         blockNumber = map['blockNumber'] != null
             ? BlockNum.exact(int.parse(map['blockNumber'] as String))
             : const BlockNum.pending(),
-        from = EthereumAddress.fromHex(map['from'] as String),
-        gas = int.parse(map['gas'] as String),
-        gasPrice = EtherAmount.inWei(BigInt.parse(map['gasPrice'] as String)),
+        from = XCBAddress.fromHex(map['from'] as String),
+        energy = int.parse(map['energy'] as String),
+        energyPrice =
+            XCBAmount.inOre(BigInt.parse(map['energyPrice'] as String)),
         hash = map['hash'] as String,
         input = hexToBytes(map['input'] as String),
         nonce = int.parse(map['nonce'] as String),
-        to = map['to'] != null
-            ? EthereumAddress.fromHex(map['to'] as String)
-            : null,
+        to = map['to'] != null ? XCBAddress.fromHex(map['to'] as String) : null,
         transactionIndex = map['transactionIndex'] != null
             ? int.parse(map['transactionIndex'] as String)
             : null,
-        value = EtherAmount.inWei(BigInt.parse(map['value'] as String)),
-        v = int.parse(map['v'] as String),
-        r = hexToInt(map['r'] as String),
-        s = hexToInt(map['s'] as String);
+        value = XCBAmount.inOre(BigInt.parse(map['value'] as String)),
+        signature = hexToBytes(strip0x(map['signature'] as String));
 
   /// The hash of the block containing this transaction. If this transaction has
   /// not been mined yet and is thus in no block, it will be `null`
@@ -32,13 +29,13 @@ class TransactionInformation {
   final BlockNum blockNumber;
 
   /// The sender of this transaction.
-  final EthereumAddress from;
+  final XCBAddress from;
 
-  /// How many units of gas have been used in this transaction.
-  final int gas;
+  /// How many units of energy have been used in this transaction.
+  final int energy;
 
-  /// The amount of Ether that was used to pay for one unit of gas.
-  final EtherAmount gasPrice;
+  /// The amount of Ether that was used to pay for one unit of energy.
+  final XCBAmount energyPrice;
 
   /// A hash of this transaction, in hexadecimal representation.
   final String hash;
@@ -52,27 +49,17 @@ class TransactionInformation {
   final int nonce;
 
   /// Address of the receiver. `null` when its a contract creation transaction
-  final EthereumAddress? to;
+  final XCBAddress? to;
 
   /// Integer of the transaction's index position in the block. `null` when it's
   /// pending.
   int? transactionIndex;
 
   /// The amount of Ether sent with this transaction.
-  final EtherAmount value;
-
-  /// A cryptographic recovery id which can be used to verify the authenticity
-  /// of this transaction together with the signature [r] and [s]
-  final int v;
-
-  /// ECDSA signature r
-  final BigInt r;
-
-  /// ECDSA signature s
-  final BigInt s;
+  final XCBAmount value;
 
   /// The ECDSA full signature used to sign this transaction.
-  MsgSignature get signature => MsgSignature(r, s, v);
+  final Uint8List signature;
 }
 
 class TransactionReceipt {
@@ -80,14 +67,14 @@ class TransactionReceipt {
       {required this.transactionHash,
       required this.transactionIndex,
       required this.blockHash,
-      required this.cumulativeGasUsed,
+      required this.cumulativeEnergyUsed,
       this.blockNumber = const BlockNum.pending(),
       this.contractAddress,
       this.status,
       this.from,
       this.to,
-      this.gasUsed,
-      this.effectiveGasPrice,
+      this.energyUsed,
+      this.effectiveEnergyPrice,
       this.logs = const []});
 
   TransactionReceipt.fromMap(Map<String, dynamic> map)
@@ -98,20 +85,19 @@ class TransactionReceipt {
             ? BlockNum.exact(int.parse(map['blockNumber'] as String))
             : const BlockNum.pending(),
         from = map['from'] != null
-            ? EthereumAddress.fromHex(map['from'] as String)
+            ? XCBAddress.fromHex(map['from'] as String)
             : null,
-        to = map['to'] != null
-            ? EthereumAddress.fromHex(map['to'] as String)
+        to = map['to'] != null ? XCBAddress.fromHex(map['to'] as String) : null,
+        cumulativeEnergyUsed = hexToInt(map['cumulativeEnergyUsed'] as String),
+        energyUsed = map['energyUsed'] != null
+            ? hexToInt(map['energyUsed'] as String)
             : null,
-        cumulativeGasUsed = hexToInt(map['cumulativeGasUsed'] as String),
-        gasUsed =
-            map['gasUsed'] != null ? hexToInt(map['gasUsed'] as String) : null,
-        effectiveGasPrice = map['effectiveGasPrice'] != null
-            ? EtherAmount.inWei(
-                BigInt.parse(map['effectiveGasPrice'] as String))
+        effectiveEnergyPrice = map['effectiveEnergyPrice'] != null
+            ? XCBAmount.inOre(
+                BigInt.parse(map['effectiveEnergyPrice'] as String))
             : null,
         contractAddress = map['contractAddress'] != null
-            ? EthereumAddress.fromHex(map['contractAddress'] as String)
+            ? XCBAddress.fromHex(map['contractAddress'] as String)
             : null,
         status = map['status'] != null
             ? (hexToDartInt(map['status'] as String) == 1)
@@ -135,22 +121,22 @@ class TransactionReceipt {
   final BlockNum blockNumber;
 
   /// Address of the sender.
-  final EthereumAddress? from;
+  final XCBAddress? from;
 
   /// Address of the receiver or `null` if it was a contract creation
   /// transaction.
-  final EthereumAddress? to;
+  final XCBAddress? to;
 
-  /// The total amount of gas used when this transaction was executed in the
+  /// The total amount of energy used when this transaction was executed in the
   /// block.
-  final BigInt cumulativeGasUsed;
+  final BigInt cumulativeEnergyUsed;
 
-  /// The amount of gas used by this specific transaction alone.
-  final BigInt? gasUsed;
+  /// The amount of energy used by this specific transaction alone.
+  final BigInt? energyUsed;
 
   /// The address of the contract created if the transaction was a contract
   /// creation. `null` otherwise.
-  final EthereumAddress? contractAddress;
+  final XCBAddress? contractAddress;
 
   /// Whether this transaction was executed successfully.
   final bool? status;
@@ -158,16 +144,16 @@ class TransactionReceipt {
   /// Array of logs generated by this transaction.
   final List<FilterEvent> logs;
 
-  final EtherAmount? effectiveGasPrice;
+  final XCBAmount? effectiveEnergyPrice;
 
   @override
   String toString() {
     return 'TransactionReceipt{transactionHash: ${bytesToHex(transactionHash)}, '
         'transactionIndex: $transactionIndex, blockHash: ${bytesToHex(blockHash)}, '
         'blockNumber: $blockNumber, from: ${from?.hex}, to: ${to?.hex}, '
-        'cumulativeGasUsed: $cumulativeGasUsed, gasUsed: $gasUsed, '
+        'cumulativeEnergyUsed: $cumulativeEnergyUsed, energyUsed: $energyUsed, '
         'contractAddress: ${contractAddress?.hex}, status: $status, '
-        'effectiveGasPrice: $effectiveGasPrice, logs: $logs}';
+        'effectiveEnergyPrice: $effectiveEnergyPrice, logs: $logs}';
   }
 
   @override
@@ -181,11 +167,11 @@ class TransactionReceipt {
           blockNumber == other.blockNumber &&
           from == other.from &&
           to == other.to &&
-          cumulativeGasUsed == other.cumulativeGasUsed &&
-          gasUsed == other.gasUsed &&
+          cumulativeEnergyUsed == other.cumulativeEnergyUsed &&
+          energyUsed == other.energyUsed &&
           contractAddress == other.contractAddress &&
           status == other.status &&
-          effectiveGasPrice == other.effectiveGasPrice &&
+          effectiveEnergyPrice == other.effectiveEnergyPrice &&
           const ListEquality().equals(logs, other.logs);
 
   @override
@@ -196,10 +182,10 @@ class TransactionReceipt {
       blockNumber.hashCode ^
       from.hashCode ^
       to.hashCode ^
-      cumulativeGasUsed.hashCode ^
-      gasUsed.hashCode ^
+      cumulativeEnergyUsed.hashCode ^
+      energyUsed.hashCode ^
       contractAddress.hashCode ^
       status.hashCode ^
-      effectiveGasPrice.hashCode ^
+      effectiveEnergyPrice.hashCode ^
       logs.hashCode;
 }

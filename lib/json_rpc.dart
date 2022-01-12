@@ -18,9 +18,11 @@ abstract class RpcService {
 }
 
 class JsonRPC extends RpcService {
-  JsonRPC(this.url, this.client);
+  JsonRPC(this.url, this.client, this.username, this.password);
 
   final String url;
+  final String username;
+  final String password;
   final Client client;
 
   int _currentRequestId = 1;
@@ -43,9 +45,12 @@ class JsonRPC extends RpcService {
       'id': _currentRequestId++,
     };
 
+    final auth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    print("req is this to $function");
+    print(json.encode(requestPayload));
     final response = await client.post(
       Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json', 'authorization': auth},
       body: json.encode(requestPayload),
     );
 
@@ -59,7 +64,7 @@ class JsonRPC extends RpcService {
       final message = error['message'] as String;
       final errorData = error['data'];
 
-      throw RPCError(code, message, errorData);
+      throw RPCError(code, message, errorData, function);
     }
 
     final result = data['result'];
@@ -81,11 +86,12 @@ class RPCError implements Exception {
   final int errorCode;
   final String message;
   final dynamic data;
+  final String function;
 
-  const RPCError(this.errorCode, this.message, this.data);
+  const RPCError(this.errorCode, this.message, this.data, this.function);
 
   @override
   String toString() {
-    return 'RPCError: got code $errorCode with msg \"$message\".';
+    return 'RPCError: func \"$function\". got code $errorCode with msg \"$message\".';
   }
 }
