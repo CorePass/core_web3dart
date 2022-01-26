@@ -283,15 +283,11 @@ class Web3Client {
     Transaction transaction, {
     required int networkId,
   }) async {
-    var signed = await signTransaction(
+    final signed = await signTransaction(
       cred,
       transaction,
       networkId: networkId,
     );
-
-    if (transaction.isEIP1559) {
-      signed = prependTransactionType(0x02, signed);
-    }
 
     return sendRawTransaction(signed);
   }
@@ -369,8 +365,6 @@ class Web3Client {
     XCBAmount? value,
     BigInt? amountOfEnergy,
     XCBAmount? energyPrice,
-    XCBAmount? maxPriorityFeePerEnergy,
-    XCBAmount? maxFeePerEnergy,
     Uint8List? data,
     @Deprecated('Parameter is ignored') BlockNum? atBlock,
   }) async {
@@ -384,12 +378,6 @@ class Web3Client {
             'energy': '0x${amountOfEnergy.toRadixString(16)}',
           if (energyPrice != null)
             'energyPrice': '0x${energyPrice.getInOre.toRadixString(16)}',
-          if (maxPriorityFeePerEnergy != null)
-            'maxPriorityFeePerEnergy':
-                '0x${maxPriorityFeePerEnergy.getInOre.toRadixString(16)}',
-          if (maxFeePerEnergy != null)
-            'maxFeePerEnergy':
-                '0x${maxFeePerEnergy.getInOre.toRadixString(16)}',
           if (value != null) 'value': '0x${value.getInOre.toRadixString(16)}',
           if (data != null) 'data': bytesToHex(data, include0x: true),
         },

@@ -7,8 +7,8 @@ import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:path/path.dart';
 import 'package:web3dart/contracts.dart';
+import 'package:web3dart/src/crypto/formatting.dart';
 
-import '../../crypto.dart';
 import 'documentation.dart';
 import 'utils.dart';
 
@@ -154,7 +154,7 @@ class _ContractGeneration {
       ..optionalParameters.addAll([
         Parameter((b) => b
           ..name = 'address'
-          ..type = ethereumAddress
+          ..type = XCBAddress
           ..named = true
           ..required = true),
         Parameter((b) => b

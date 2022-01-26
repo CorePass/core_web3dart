@@ -24,13 +24,11 @@ Future<_SigningInput> _fillMissingData({
   if (client == null &&
       (transaction.nonce == null ||
           transaction.maxEnergy == null ||
-          (!transaction.isEIP1559 && energyPrice == null))) {
+          (energyPrice == null))) {
     throw ArgumentError('Client is required to perform network actions');
   }
 
-  if (!transaction.isEIP1559 && energyPrice == null) {
-    energyPrice = await client!.getEnergyPrice();
-  }
+  energyPrice ??= await client!.getEnergyPrice();
 
   final nonce = transaction.nonce ??
       await client!
@@ -44,8 +42,6 @@ Future<_SigningInput> _fillMissingData({
             data: transaction.data,
             value: transaction.value,
             energyPrice: energyPrice,
-            maxPriorityFeePerEnergy: transaction.maxPriorityFeePerEnergy,
-            maxFeePerEnergy: transaction.maxFeePerEnergy,
           )
           .then((bigInt) => bigInt.toInt());
 
@@ -67,12 +63,6 @@ Future<_SigningInput> _fillMissingData({
     credentials: credentials,
     networkId: resolvedChainId,
   );
-}
-
-Uint8List prependTransactionType(int type, Uint8List transaction) {
-  return Uint8List(transaction.length + 1)
-    ..[0] = type
-    ..setAll(1, transaction);
 }
 
 Future<Uint8List> _signTransaction(

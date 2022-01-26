@@ -40,33 +40,27 @@ class Transaction {
   /// have already been sent by [from].
   final int? nonce;
 
-  final XCBAmount? maxPriorityFeePerEnergy;
-  final XCBAmount? maxFeePerEnergy;
-
-  Transaction(
-      {this.from,
-      this.to,
-      this.maxEnergy,
-      this.energyPrice,
-      this.value,
-      this.data,
-      this.nonce,
-      this.maxFeePerEnergy,
-      this.maxPriorityFeePerEnergy});
+  Transaction({
+    this.from,
+    this.to,
+    this.maxEnergy,
+    this.energyPrice,
+    this.value,
+    this.data,
+    this.nonce,
+  });
 
   /// Constructs a transaction that can be used to call a contract function.
-  Transaction.callContract(
-      {required DeployedContract contract,
-      required ContractFunction function,
-      required List<dynamic> parameters,
-      this.from,
-      this.maxEnergy,
-      this.energyPrice,
-      this.value,
-      this.nonce,
-      this.maxFeePerEnergy,
-      this.maxPriorityFeePerEnergy})
-      : to = contract.address,
+  Transaction.callContract({
+    required DeployedContract contract,
+    required ContractFunction function,
+    required List<dynamic> parameters,
+    this.from,
+    this.maxEnergy,
+    this.energyPrice,
+    this.value,
+    this.nonce,
+  })  : to = contract.address,
         data = function.encodeCall(parameters);
 
   Transaction copyWith(
@@ -87,12 +81,6 @@ class Transaction {
       value: value ?? this.value,
       data: data ?? this.data,
       nonce: nonce ?? this.nonce,
-      maxFeePerEnergy: maxFeePerEnergy ?? this.maxFeePerEnergy,
-      maxPriorityFeePerEnergy:
-          maxPriorityFeePerEnergy ?? this.maxPriorityFeePerEnergy,
     );
   }
-
-  bool get isEIP1559 =>
-      maxFeePerEnergy != null && maxPriorityFeePerEnergy != null;
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:test/test.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/src/crypto/formatting.dart';
 import 'package:web3dart/web3dart.dart';
 
 void main() {

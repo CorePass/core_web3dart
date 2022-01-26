@@ -1,7 +1,10 @@
 import 'package:test/test.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:web3dart/src/crypto/formatting.dart';
+import 'package:web3dart/credentials.dart';
 
 void main() {
+  XCBAddress? asghar;
+  print(asghar?.addressBytes);
   test('strip 0x prefix', () {
     expect(strip0x('0x12F312319235'), '12F312319235');
     expect(strip0x('123123'), '123123');
