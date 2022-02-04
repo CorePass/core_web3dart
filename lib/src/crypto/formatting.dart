@@ -71,3 +71,6 @@ BigInt hexToInt(String hex) {
 int hexToDartInt(String hex) {
   return int.parse(strip0x(hex), radix: 16);
 }
+
+/// checks if hex has 0x prefix
+bool hexHasPrefix(String hex) => hex.startsWith('0x');

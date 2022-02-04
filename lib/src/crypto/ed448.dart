@@ -1,21 +1,21 @@
 import 'dart:typed_data';
 
-import 'package:flutter_ed448/flutter_ed448.dart';
 import 'package:web3dart/crypto.dart';
-import 'package:web3dart/src/crypto/formatting.dart';
+import 'package:flutter_ed448/src/HDWallets/ed448_hd_wallets.dart';
+
+final ed448Wallet = Ed448HDWallet();
 
 /// Generates a public key for the given private key using the ed448 curve which
 /// core blockchain uses.
-Future<Uint8List> privateKeyBytesToPublic(Uint8List privateKey) async {
-  var response =
-      await FlutterEd448.getPublicKeyFromPrivateKey(bytesToHex(privateKey));
-  return hexToBytes(response);
+Uint8List privateKeyBytesToPublic(Uint8List privateKey) {
+  final response = ed448Wallet.ed448DerivePublicKey(privateKey);
+  return response;
 }
 
 /// Generates a public key for the given private key using the ecdsa curve which
 /// core blockchain uses.
-Future<Uint8List> privateKeyToPublic(BigInt privateKey) async {
-  Uint8List intPriv = intToBytes(privateKey);
+Uint8List privateKeyToPublic(BigInt privateKey) {
+  final intPriv = intToBytes(privateKey);
   final response = privateKeyBytesToPublic(intPriv);
   //skip the type flag, https://github.com/ethereumjs/ethereumjs-util/blob/master/index.js#L319
   return response;
@@ -23,14 +23,13 @@ Future<Uint8List> privateKeyToPublic(BigInt privateKey) async {
 
 /// Generates a new private key using the random instance provided. Please make
 /// sure you're using a cryptographically secure generator.
-Future<BigInt> generateNewPrivateKey(String seed, String index) async {
-  final response = await FlutterEd448.generatePrivateKey(seed, index);
-  return hexToInt(response);
+BigInt generateNewPrivateKey(String seed, int index) {
+  final response = ed448Wallet.HDWalletGenerateKey(hexToBytes(seed), index);
+  return bytesToInt(response);
 }
 
 /// Constructs the core blockchain address associated with the given public key by
 /// taking the lower 160 bits of the key's sha3 hash.
-// TODO: get network id
 Uint8List publicKeyToAddress(Uint8List publicKey, int networkId) {
   assert(publicKey.length == 57);
   final hash = sha3_256(publicKey);
@@ -50,13 +49,11 @@ Uint8List publicKeyToAddress(Uint8List publicKey, int networkId) {
 }
 // in sign index 114 => pubkey
 
-/// Signs the hashed data in [messageHash] using the given private key.
-Future<Uint8List> signWithPrivKey(
-    Uint8List messageHash, Uint8List privateKey) async {
-  final signedMsg = await FlutterEd448.signWithPrivateKeyNConcatPubkey(
-      bytesToHex(privateKey), bytesToHex(messageHash));
-
-  return hexToBytes(signedMsg);
+/// Signs the hashed data in [messageHash] using the given private key, also concats the public key at the end.
+Uint8List signWithPrivKey(Uint8List messageHash, Uint8List privateKey) {
+  final signedMsg = ed448Wallet.ed448Sign(privateKey, messageHash);
+  final publicKey = ed448Wallet.ed448DerivePublicKey(privateKey);
+  return Uint8List.fromList(signedMsg + publicKey);
 }
 
 /// Given an arbitrary core blockchain message signature encoded in bytes, returns
@@ -73,16 +70,14 @@ Uint8List ecRecover(Uint8List signedMessage) {
 /// Given an arbitrary message hash, an Core Block Chain message signature encoded in bytes and
 /// a public key encoded in bytes, confirms whether that public key was used to sign
 /// the message or not.
-Future<bool> isValidSignature(
-    Uint8List messageHash, Uint8List signedMsg, Uint8List publicKey) async {
+bool isValidSignature(
+    Uint8List messageHash, Uint8List signedMsg, Uint8List publicKey) {
   List<int> extractedSign = [];
   for (var i = 0; i < 114; i++) {
     extractedSign.add(signedMsg[i]);
   }
-  bool verifyResult = await FlutterEd448.verifySignature(
-      bytesToHex(messageHash),
-      bytesToHex(extractedSign),
-      bytesToHex(publicKey));
+  final verifyResult = ed448Wallet.ed448Verify(
+      publicKey, messageHash, Uint8List.fromList(extractedSign));
 
   return verifyResult;
 }

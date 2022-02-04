@@ -1,0 +1,26 @@
+import 'package:hex/hex.dart';
+
+final TYPED_MESSAGE_SCHEMA = {
+  "type": 'object',
+  "properties": {
+    "types": {
+      "type": 'object',
+      "additionalProperties": {
+        "type": 'array',
+        "items": {
+          "type": 'object',
+          "properties": {
+            "name": {"type": 'string'},
+            "type": {"type": 'string'},
+          },
+          "required": ['name', 'type'],
+        },
+      },
+    },
+    "primaryType": {"type": 'string'},
+    "domain": {"type": 'object'},
+    "message": {"type": 'object'},
+  },
+  "required": ['types', 'primaryType', 'domain', 'message'],
+};
+final EIP_191_PREFIX = HEX.decode("1901");

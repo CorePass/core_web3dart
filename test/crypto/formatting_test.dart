@@ -17,7 +17,8 @@ void main() {
   });
 
   test('bytesToHex', () {
-    expect(bytesToHex([3], padToEvenLength: true), '03');
+    final res = bytesToHex([3], padToEvenLength: true);
+    expect(res, '03');
     expect(bytesToHex([3], forcePadLength: 3), '003');
   });
 }

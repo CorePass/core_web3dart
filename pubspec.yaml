@@ -29,7 +29,7 @@ dependencies:
   collection: ^1.14.11
   flutter_ed448: 
     git:
-      url: git@git.energy:mojtabaparvar/ed448_goldilock_dart.git
+      url: git@git.energy:mojtabaparvar/flutter_ed448_pure_dart.git
 
 
 dev_dependencies:
