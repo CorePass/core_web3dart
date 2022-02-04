@@ -21,7 +21,7 @@ Uint8List privateKeyToPublic(BigInt privateKey) {
   return response;
 }
 
-/// Generates a new private key using the random instance provided. Please make
+/// Generates a new private key using the seed. Please make
 /// sure you're using a cryptographically secure generator.
 BigInt generateNewPrivateKey(String seed, int index) {
   final response = ed448Wallet.HDWalletGenerateKey(hexToBytes(seed), index);

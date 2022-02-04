@@ -68,6 +68,16 @@ class XCBPrivateKey extends Credentials {
         XCBAddress(publicKeyToAddress(_pubKey, networkId));
   }
 
+  /// Creates a new, random private key from the [random] number generator.
+  ///
+  /// For security reasons, it is very important that the random generator used
+  /// is cryptographically secure. The private key could be reconstructed by
+  /// someone else otherwise. Just using [Random()] is a very bad idea! At least
+  /// use [Random.secure()].
+  factory XCBPrivateKey.createPrivateKey(String seed, int index) {
+    final key = generateNewPrivateKey(seed, index);
+    return XCBPrivateKey(intToBytes(key));
+  }
   @override
   Uint8List signToSignature(Uint8List payload, {required int networkId}) {
     final signature = signWithPrivKey(sha3_256(payload), privateKey);
