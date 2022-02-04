@@ -8,7 +8,7 @@ void main() {
       '0x000000000000000000000000Dd611f2b2CaF539aC9e12CF84C09CB9bf81CA37F';
   const bob =
       '0x0000000000000000000000006c87E1a114C3379BEc929f6356c5263d62542C13';
-  const contract = '0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d';
+  const contract = 'cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5';
 
   final testCases = [
     {
@@ -81,13 +81,13 @@ void main() {
 
   Future _runFilterTest(input, expected) async {
     final client = MockClient(expectAsync2((method, params) {
-      expect(method, 'eth_getLogs');
+      expect(method, 'xcb_getLogs');
 
-      // verify that the topics are sent to eth_getLogs in the correct format
+      // verify that the topics are sent to xcb_getLogs in the correct format
       final actual = ((params as List)[0])['topics'];
       expect(actual, expected);
 
-      // return a valid response from eth_getLogs
+      // return a valid response from xcb_getLogs
       return [
         {'address': contract}
       ];

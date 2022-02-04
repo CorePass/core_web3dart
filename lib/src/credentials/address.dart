@@ -7,10 +7,9 @@ import 'package:web3dart/crypto.dart';
 /// Represents an Core Block Chain address.
 @immutable
 class XCBAddress {
-  // TODO: proper Regex should be added here
   static final xcbAddrLength = 44;
   static final RegExp _basicAddress =
-      RegExp(r'^(0x)?[0-9a-f]{44}', caseSensitive: false);
+      RegExp(r'^(cb)|(ce)|(ab)?[0-9a-f]{42}', caseSensitive: false);
 
   /// The length of an ethereum address, in bytes.
   static const addressByteLength = 22;
@@ -46,12 +45,12 @@ class XCBAddress {
     return XCBAddress(hexToBytes(hex));
   }
 
-  /// A hexadecimal representation of this address, padded to a length of 40
-  /// characters or 20 bytes, and prefixed with "0x".
+  /// A hexadecimal representation of this address, padded to a length of 44
+  /// characters or 22 bytes, and prefixed with "0x".
   String get hex =>
       bytesToHex(addressBytes, include0x: true, forcePadLength: xcbAddrLength);
 
-  /// A hexadecimal representation of this address, padded to a length of 40
+  /// A hexadecimal representation of this address, padded to a length of 44
   /// characters or 20 bytes, but not prefixed with "0x".
   String get hexNo0x =>
       bytesToHex(addressBytes, include0x: false, forcePadLength: xcbAddrLength);

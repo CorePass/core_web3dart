@@ -16,7 +16,7 @@ void main() {
 
   test('encodes and sends requests', () async {
     await JsonRPC('url', client, '', '')
-        .call('eth_gasPrice', ['param', 'another']);
+        .call('xcb_gasPrice', ['param', 'another']);
 
     final request = client.request!;
     expect(request.headers,
@@ -25,8 +25,8 @@ void main() {
 
   test('increments request id', () async {
     final rpc = JsonRPC('url', client, '', '');
-    await rpc.call('eth_gasPrice', ['param', 'another']);
-    await rpc.call('eth_gasPrice', ['param', 'another']);
+    await rpc.call('xcb_gasPrice', ['param', 'another']);
+    await rpc.call('xcb_gasPrice', ['param', 'another']);
 
     final lastRequest = client.request!;
     expect(
@@ -41,7 +41,7 @@ void main() {
       200,
     );
 
-    expect(rpc.call('eth_gasPrice'), throwsException);
+    expect(rpc.call('xcb_gasPrice'), throwsException);
   });
 }
 

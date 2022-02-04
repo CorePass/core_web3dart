@@ -10,9 +10,9 @@ void main() {
 {
   "blockHash": "0x5548b5f215b99674c7f23c9a701a005b5c18e4a963b55163eddada54562ac521",
   "blockNumber": "0x18",
-  "contractAddress": "0x6671e02bb8bd3a234b13d79d1c285a9df657233d",
+  "contractAddress": "cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5",
   "cumulativeEnergyUsed": "0x4cc5f",
-  "from": "0xf8c59caf9bb8a7a2991160b592ac123108d88f7b",
+  "from": "cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5",
   "gasUsed": "0x4cc5f",
   "logs": [
     {
@@ -21,14 +21,14 @@ void main() {
       "blockHash": "0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d",
       "transactionHash": "0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf",
       "transactionIndex": "0x0",
-      "address": "0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d",
+      "address": "cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5",
        "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
        "topics": ["0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5"]
     }
   ],
   "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
   "root": "0x89628cd74b7246a144781e0f537bac145df645945c213f82ab45f4c6729f1e4c",
-  "to": "0xf8c59caf9bb8a7a2991160b592ac123108d88f7b",
+  "to": "cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5",
   "transactionHash": "0xb75a96c4751ff03b1bdcf5300e80a45e788e52650b0a4e2294e7496c215f4c9d",
   "transactionIndex": "0x18",
   "status": "0x1"
@@ -45,12 +45,12 @@ void main() {
             cumulativeEnergyUsed: BigInt.from(314463),
             blockNumber: const BlockNum.exact(24),
             contractAddress: XCBAddress.fromHex(
-                '0x6671e02bb8bd3a234b13d79d1c285a9df657233d'),
+                'cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5'),
             status: true,
             from: XCBAddress.fromHex(
-                '0xf8c59caf9bb8a7a2991160b592ac123108d88f7b'),
+                'cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5'),
             to: XCBAddress.fromHex(
-                '0xf8c59caf9bb8a7a2991160b592ac123108d88f7b'),
+                'cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5'),
             energyUsed: BigInt.from(314463),
             logs: [
               FilterEvent(
@@ -61,7 +61,7 @@ void main() {
                       '0x8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcfdf829c5a142f1fccd7d',
                   transactionHash: '0xdf829c5a142f1fccd7d8216c5785ac562ff41e2dcfdf5785ac562ff41e2dcf',
                   transactionIndex: 0,
-                  address: XCBAddress.fromHex('0x16c5785ac562ff41e2dcfdf829c5a142f1fccd7d'),
+                  address: XCBAddress.fromHex('cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5'),
                   data: '0x0000000000000000000000000000000000000000000000000000000000000000',
                   topics: [
                     '0x59ebeb90bc63057b6515673c3ecf9438e5058bca0f92585014eced636878c9a5'

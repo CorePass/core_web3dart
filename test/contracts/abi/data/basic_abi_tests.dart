@@ -30,7 +30,7 @@ const content = r'''
   "IntegerAndAddress": {
     "args": [
       324124,
-      "@cd2a3d9f938e13cd947ec05abc7fe734df8dd826"
+      "@cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5"
     ],
     "result": "000000000000000000000000000000000000000000000000000000000004f21c000000000000000000000000cd2a3d9f938e13cd947ec05abc7fe734df8dd826",
     "types": [

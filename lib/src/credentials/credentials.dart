@@ -19,28 +19,26 @@ abstract class Credentials {
   bool get isolateSafe => false;
 
   /// Loads the ethereum address specified by these credentials.
-  Future<XCBAddress> extractAddress(int networkId);
+  XCBAddress extractAddress(int networkId);
 
   /// Signs the [payload] with a private key. The output will be like the
   /// bytes representation of the [xcb_sign RPC method](https://github.com/ethereum/wiki/wiki/JSON-RPC#xcb_sign),
   /// but without the "Ethereum signed message" prefix.
   /// The [payload] parameter contains the raw data, not a hash.
-  Future<Uint8List> sign(Uint8List payload, {required int networkId}) async {
-    final signature = await signToSignature(payload, networkId: networkId);
+  Uint8List sign(Uint8List payload, {required int networkId}) {
+    final signature = signToSignature(payload, networkId: networkId);
 
     return signature;
   }
 
   /// Signs the [payload] with a private key and returns the obtained
   /// signature.
-  Future<Uint8List> signToSignature(Uint8List payload,
-      {required int networkId});
+  Uint8List signToSignature(Uint8List payload, {required int networkId});
 
   /// Signs an Core Block Chain specific signature. This method is equivalent to
   /// [sign], but with a special prefix so that this method can't be used to
   /// sign, for instance, transactions.
-  Future<Uint8List> signPersonalMessage(Uint8List payload,
-      {required int networkId}) {
+  Uint8List signPersonalMessage(Uint8List payload, {required int networkId}) {
     final prefix = _messagePrefix + payload.length.toString();
     final prefixBytes = ascii.encode(prefix);
 
@@ -64,16 +62,15 @@ class XCBPrivateKey extends Credentials {
   final bool isolateSafe = true;
 
   @override
-  Future<XCBAddress> extractAddress(int networkId) async {
-    var _pubKey = await privateKeyBytesToPublic(privateKey);
+  XCBAddress extractAddress(int networkId) {
+    var _pubKey = privateKeyBytesToPublic(privateKey);
     return _cachedAddress ??=
         XCBAddress(publicKeyToAddress(_pubKey, networkId));
   }
 
   @override
-  Future<Uint8List> signToSignature(Uint8List payload,
-      {required int networkId}) async {
-    final signature = await signWithPrivKey(sha3_256(payload), privateKey);
+  Uint8List signToSignature(Uint8List payload, {required int networkId}) {
+    final signature = signWithPrivKey(sha3_256(payload), privateKey);
     return signature;
   }
 

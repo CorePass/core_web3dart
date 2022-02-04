@@ -23,19 +23,19 @@ String bytesToHex(List<int> bytes,
     int? forcePadLength,
     bool padToEvenLength = false}) {
   var encoded = hex.encode(bytes);
-  // if (forcePadLength == 44) {
-  //   final padding = forcePadLength - encoded.length;
-  //   encoded = ('0' * (padding - 2)) + encoded;
-  //   encoded = 'ce$encoded';
-  // }
+
+  if (forcePadLength != null) {
+    assert(forcePadLength >= encoded.length);
+
+    final padding = forcePadLength - encoded.length;
+    encoded = ('0' * padding) + encoded;
+  }
+
   if (padToEvenLength && encoded.length % 2 != 0) {
     encoded = '0$encoded';
   }
-  if (forcePadLength == null && include0x) {
-    encoded = '0x$encoded';
-  }
 
-  return encoded;
+  return (include0x ? '0x' : '') + encoded;
 }
 
 /// Converts the hexadecimal string, which can be prefixed with 0x, to a byte

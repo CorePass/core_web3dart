@@ -17,8 +17,7 @@ Future<_SigningInput> _fillMissingData({
   required int networkId,
   Web3Client? client,
 }) async {
-  final sender =
-      transaction.from ?? await credentials.extractAddress(networkId);
+  final sender = transaction.from ?? credentials.extractAddress(networkId);
   var energyPrice = transaction.energyPrice;
 
   if (client == null &&
@@ -65,14 +64,13 @@ Future<_SigningInput> _fillMissingData({
   );
 }
 
-Future<Uint8List> _signTransaction(
-    Transaction transaction, Credentials c, BigInt networkId) async {
+Uint8List _signTransaction(
+    Transaction transaction, Credentials c, BigInt networkId) {
   final _enRlp = _encodeRawToRlp(transaction, networkId);
 
   final _enLp = rlp.encode(_enRlp);
   final encoded = uint8ListFromList(_enLp);
-  final signature =
-      await c.signToSignature(encoded, networkId: networkId.toInt());
+  final signature = c.signToSignature(encoded, networkId: networkId.toInt());
   final _sigEnRlp = _encodeToRlp(transaction, signature, networkId);
   print(_sigEnRlp.toString());
   final _sigLp = rlp.encode(_sigEnRlp);
