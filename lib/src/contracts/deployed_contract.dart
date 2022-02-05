@@ -2,7 +2,7 @@ import '../credentials/address.dart';
 import 'abi/abi.dart';
 
 /// Helper class that defines a contract with a known ABI that has been deployed
-/// on a Ethereum blockchain.
+/// on a Core blockchain.
 ///
 /// A future version of this library will automatically generate subclasses of
 /// this based on the abi given, making it easier to call methods in contracts.
@@ -11,7 +11,7 @@ class DeployedContract {
   /// transactions when calling this contract.
   final ContractAbi abi;
 
-  /// The Ethereum address at which this contract is reachable.
+  /// The Core address at which this contract is reachable.
   final XCBAddress address;
 
   DeployedContract(this.abi, this.address);

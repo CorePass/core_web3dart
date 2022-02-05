@@ -58,7 +58,7 @@ Wallet wallet = Wallet.createNew(credentials, "password", random);
 print(wallet.toJson());
 ```
 You can also write `wallet.toJson()` into a file which you can later open 
-with [MyEtherWallet](https://www.myetherwallet.com/#view-wallet-info) 
+with [MyCoreWallet](https://www.myetherwallet.com/#view-wallet-info) 
 (select Keystore / JSON File) or other Core clients like geth.
 
 #### Custom credentials
@@ -127,12 +127,6 @@ pub run build_runner build
 ```
 
 You'll now find a `.g.dart` file containing code to interact with the contract.
-
-
-```
-
-```
-
 
 ## Feature requests and bugs
 

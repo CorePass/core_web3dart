@@ -23,7 +23,7 @@ abstract class Credentials {
 
   /// Signs the [payload] with a private key. The output will be like the
   /// bytes representation of the [xcb_sign RPC method](https://github.com/ethereum/wiki/wiki/JSON-RPC#xcb_sign),
-  /// but without the "Ethereum signed message" prefix.
+  /// but without the "Core signed message" prefix.
   /// The [payload] parameter contains the raw data, not a hash.
   Uint8List sign(Uint8List payload, {required int networkId}) {
     final signature = signToSignature(payload, networkId: networkId);

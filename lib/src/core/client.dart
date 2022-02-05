@@ -16,7 +16,7 @@ part of 'package:web3dart/web3dart.dart';
 /// ```
 typedef SocketConnector = StreamChannel<String> Function();
 
-/// Class for sending requests over an HTTP JSON-RPC API endpoint to Ethereum
+/// Class for sending requests over an HTTP JSON-RPC API endpoint to Core
 /// clients. This library won't use the accounts feature of clients to use them
 /// to create transactions, you will instead have to obtain private keys of
 /// accounts yourself.
@@ -105,7 +105,7 @@ class Web3Client {
   ///
   /// In a non-private network, the network ids usually correspond to the
   /// following networks:
-  /// 1: Ethereum Mainnet
+  /// 1: Core Mainnet
   /// 2: Morden Testnet (deprecated)
   /// 3: Ropsten Testnet
   /// 4: Rinkeby Testnet
@@ -124,14 +124,14 @@ class Web3Client {
     return _makeRPCCall('net_listening');
   }
 
-  /// Returns the amount of Ethereum nodes currently connected to the client.
+  /// Returns the amount of Core nodes currently connected to the client.
   Future<int> getPeerCount() async {
     final hex = await _makeRPCCall<String>('net_peerCount');
     return hexToInt(hex).toInt();
   }
 
-  /// Returns the version of the Ethereum-protocol the client is using.
-  Future<int> getEtherProtocolVersion() async {
+  /// Returns the version of the Core-protocol the client is using.
+  Future<int> getCoreProtocolVersion() async {
     final hex = await _makeRPCCall<String>('xcb_protocolVersion');
     return hexToInt(hex).toInt();
   }
@@ -170,7 +170,7 @@ class Web3Client {
         .then((s) => hexToInt(s).toInt());
   }
 
-  /// Returns the amount of Ether typically needed to pay for one unit of energy.
+  /// Returns the amount of Core typically needed to pay for one unit of energy.
   ///
   /// Although not strictly defined, this value will typically be a sensible
   /// amount to use.
@@ -334,7 +334,7 @@ class Web3Client {
   /// means that the call can't write any data to the blockchain. Doing that
   /// would require a transaction which can be sent via [sendTransaction].
   /// As no data will be written, you can use the [sender] to specify any
-  /// Ethereum address that would call that function. To use the address of a
+  /// Core address that would call that function. To use the address of a
   /// credential, call [Credentials.extractAddress].
   ///
   /// This function allows specifying a custom block mined in the past to get
@@ -392,7 +392,7 @@ class Web3Client {
   /// means that the call can't write any data to the blockchain. Doing that
   /// would require a transaction which can be sent via [sendTransaction].
   /// As no data will be written, you can use the [sender] to specify any
-  /// Ethereum address that would call that function. To use the address of a
+  /// Core address that would call that function. To use the address of a
   /// credential, call [Credentials.extractAddress].
   ///
   /// This function allows specifying a custom block mined in the past to get

@@ -1,4 +1,4 @@
-/// Library to create and unlock Ethereum wallets and operate with private keys.
+/// Library to create and unlock Core wallets and operate with private keys.
 library credentials;
 
 export 'src/credentials/address.dart';

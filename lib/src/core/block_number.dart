@@ -1,5 +1,5 @@
 /// For operations that are reading data from the blockchain without making a
-/// transaction that would modify it, the Ethereum client can read that data
+/// transaction that would modify it, the Core client can read that data
 /// from previous states of the blockchain as well. This class specifies which
 /// state to use.
 class BlockNum {
@@ -27,7 +27,7 @@ class BlockNum {
       : useAbsolute = false,
         blockNum = 2;
 
-  /// Generates the block parameter as it is accepted by the Ethereum client.
+  /// Generates the block parameter as it is accepted by the Core client.
   String toBlockParam() {
     if (useAbsolute) return '0x${blockNum.toRadixString(16)}';
 

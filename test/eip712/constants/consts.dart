@@ -71,10 +71,10 @@ final TEST_TYPES = {
 };
 final Map<String, dynamic> TEST_TYPED_DATA_2 = {
   "domain": {
-    // Defining the chain aka Rinkeby testnet or Ethereum Main Net
+    // Defining the chain aka Rinkeby testnet or Core Main Net
     "chainId": 1,
     // Give a user friendly name to the specific contract you are signing for.
-    "name": 'Ether Mail',
+    "name": 'Core Mail',
     // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
     "verifyingContract": '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
     // Just let's you know the latest version. Definitely make sure the field name is correct.
@@ -138,10 +138,10 @@ final Map<String, dynamic> TEST_TYPED_DATA_2 = {
 };
 final Map<String, dynamic> TEST_TYPED_DATA_2_WITHOUT_EIP = {
   "domain": {
-    // Defining the chain aka Rinkeby testnet or Ethereum Main Net
+    // Defining the chain aka Rinkeby testnet or Core Main Net
     "chainId": 1,
     // Give a user friendly name to the specific contract you are signing for.
-    "name": 'Ether Mail',
+    "name": 'Core Mail',
     // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
     "verifyingContract": '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
     // Just let's you know the latest version. Definitely make sure the field name is correct.
@@ -355,7 +355,7 @@ final SANITIZED_TYPED_DATA2 = {
   "primaryType": "Mail",
   "domain": {
     "chainId": 1,
-    "name": "Ether Mail",
+    "name": "Core Mail",
     "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
     "version": "1",
   },
@@ -421,7 +421,7 @@ final SANITIZED_TYPED_DATA2_WITHOUT_EIP = {
   "primaryType": "Mail",
   "domain": {
     "chainId": 1,
-    "name": "Ether Mail",
+    "name": "Core Mail",
     "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
     "version": "1",
   },

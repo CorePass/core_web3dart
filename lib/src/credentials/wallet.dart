@@ -90,7 +90,7 @@ class _ScryptKeyDerivator extends _KeyDerivator {
 }
 
 /// Represents a wallet file. Wallets are used to securely store credentials
-/// like a private key belonging to an Ethereum address. The private key in a
+/// like a private key belonging to an Core address. The private key in a
 /// wallet is encrypted with a secret password that needs to be known in order
 /// to obtain the private key.
 @immutable
@@ -157,7 +157,7 @@ class Wallet {
 
   /// Reads and unlocks the wallet denoted in the json string given with the
   /// specified [password]. [encoded] must be the String contents of a valid
-  /// v3 Ethereum wallet file.
+  /// v3 Core wallet file.
   factory Wallet.fromJson(String encoded, String password) {
     /*
       In order to read the wallet and obtain the secret key stored in it, we

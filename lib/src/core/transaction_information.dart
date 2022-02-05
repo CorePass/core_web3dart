@@ -34,7 +34,7 @@ class TransactionInformation {
   /// How many units of energy have been used in this transaction.
   final int energy;
 
-  /// The amount of Ether that was used to pay for one unit of energy.
+  /// The amount of Core that was used to pay for one unit of energy.
   final XCBAmount energyPrice;
 
   /// A hash of this transaction, in hexadecimal representation.
@@ -55,7 +55,7 @@ class TransactionInformation {
   /// pending.
   int? transactionIndex;
 
-  /// The amount of Ether sent with this transaction.
+  /// The amount of Core sent with this transaction.
   final XCBAmount value;
 
   /// The ECDSA full signature used to sign this transaction.

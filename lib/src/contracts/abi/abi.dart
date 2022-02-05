@@ -25,7 +25,7 @@ const Map<String, ContractFunctionType> _functionTypeNames = {
 /// interacts with the blockchain.
 ///
 /// Functions whose mutability is either [pure] or [view] promise to not write
-/// data to the blockchain. This allows Ethereum nodes to execute them locally
+/// data to the blockchain. This allows Core nodes to execute them locally
 /// instead of sending a transaction for the invocation. That in turn makes them
 /// free to use. Mutable functions, like [nonPayable] or [payable] may write to
 /// the blockchain, which means that they can only be executed as part of a
@@ -38,10 +38,10 @@ enum StateMutability {
   /// Function that reads from the blockchain, but doesn't write to it.
   view,
 
-  /// Function that may write to the blockchain, but doesn't accept any Ether.
+  /// Function that may write to the blockchain, but doesn't accept any Core.
   nonPayable,
 
-  /// Function that may write to the blockchain and additionally accepts Ether.
+  /// Function that may write to the blockchain and additionally accepts Core.
   payable,
 }
 
@@ -56,7 +56,7 @@ String _encodeParameters(Iterable<FunctionParameter> params) {
   return params.map((p) => p.type.name).join(',');
 }
 
-/// Defines the abi of a deployed Ethereum contract. The abi contains
+/// Defines the abi of a deployed Core contract. The abi contains
 /// information about the functions defined in that contract.
 class ContractAbi {
   /// Name of the contract
@@ -193,15 +193,15 @@ class ContractFunction {
 
   /// Returns true if this function is constant, i.e. it cannot modify the state
   /// of the blockchain when called. This allows the function to be called
-  /// without sending Ether or energy as the connected client can compute it
+  /// without sending Core or energy as the connected client can compute it
   /// locally, no expensive mining will be required.
   bool get isConstant =>
       mutability == StateMutability.view || mutability == StateMutability.pure;
 
-  /// Returns true if this function can be used to send Ether to a smart
-  /// contract that the contract will actually keep. Normally, all Ether sent
+  /// Returns true if this function can be used to send Core to a smart
+  /// contract that the contract will actually keep. Normally, all Core sent
   /// with a transaction will be used to pay for energy fees and the rest will be
-  /// sent back. Here however, the Ether (minus the fees) will be kept by the
+  /// sent back. Here however, the Core (minus the fees) will be kept by the
   /// contract.
   bool get isPayable => mutability == StateMutability.payable;
 

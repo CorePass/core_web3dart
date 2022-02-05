@@ -43,7 +43,7 @@ void _runTests(String content) {
   }
 }
 
-/// Maps types from an Ethereum abi test vector to types that are understood by
+/// Maps types from an Core abi test vector to types that are understood by
 /// web3dart:
 /// - [int] will be mapped to [BigInt]
 /// - a [String] starting with "0x" to [Uint8List]

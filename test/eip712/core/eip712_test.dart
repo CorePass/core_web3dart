@@ -102,7 +102,7 @@ void main() {
             "EIP712Domain",
             {
               "chainId": 1,
-              "name": "Ether Mail",
+              "name": "Core Mail",
               "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
               "version": "1",
             },

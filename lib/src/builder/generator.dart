@@ -164,8 +164,8 @@ class _ContractGeneration {
           ..required = true),
         Parameter((b) => b
           ..name = 'chainId'
-          ..type = dartInt.rebuild((b) => b.isNullable = true)
-          ..required = false
+          ..type = dartInt
+          ..required = true
           ..named = true),
       ])
       ..initializers.add(callSuper([
@@ -395,10 +395,6 @@ class _ContractGeneration {
         self.property('abi').property('functions').index(literalNum(index));
 
     statements.add(functionExpr.assignFinal('function').statement);
-
-    // Assert that we got the right function, just to be sure
-    final selector = bytesToHex(function.selector);
-    statements.add(Code("assert(checkSignature(function, '$selector'));"));
   }
 
   Expression _event(ContractEvent event) {

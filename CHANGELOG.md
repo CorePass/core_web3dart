@@ -40,7 +40,7 @@
 ## 2.1.0
 
 - Add `package:web3dart/browser.dart`, a library for using this package in
-  Ethereum-enabled browsers.
+  Core-enabled browsers.
 - Add code generator for smart contracts. To use it, just put the generated abi
   json into a `.abi.json` file, add a dev-dependency on `build_runner` and run
   `(flutter | dart) pub run build_runner build`.
@@ -123,7 +123,7 @@ If you run into problems after updating, please [create an issue](https://github
   Blockchain.
 
 ## 0.1
-- Create new Ethereum accounts
+- Create new Core accounts
 
 ## 0.0.2
 - Send and sign transactions
