@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:web3dart/src/crypto/formatting.dart';
+import 'package:core_web3dart/src/crypto/formatting.dart';
 
 class ABIHelper {
   Uint8List rawEncode(types, values) {

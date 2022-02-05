@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:core_web3dart/crypto.dart';
 
 /// Represents an Core Block Chain address.
 @immutable

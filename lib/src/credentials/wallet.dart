@@ -11,7 +11,7 @@ import 'package:pointycastle/key_derivators/pbkdf2.dart' as pbkdf2;
 import 'package:pointycastle/key_derivators/scrypt.dart' as scrypt;
 import 'package:pointycastle/macs/hmac.dart';
 import 'package:pointycastle/stream/ctr.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:core_web3dart/crypto.dart';
 
 import '../crypto/random_bridge.dart';
 import '../utils/typed_data.dart';

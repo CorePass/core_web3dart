@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:web3dart/contracts.dart';
+import 'package:core_web3dart/contracts.dart';
 
 final abiTypes = <String, AbiType>{
   'uint256': const UintType(),

@@ -6,8 +6,8 @@ import 'package:built_collection/built_collection.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:path/path.dart';
-import 'package:web3dart/contracts.dart';
-import 'package:web3dart/src/crypto/formatting.dart';
+import 'package:core_web3dart/contracts.dart';
+import 'package:core_web3dart/src/crypto/formatting.dart';
 
 import 'documentation.dart';
 import 'utils.dart';

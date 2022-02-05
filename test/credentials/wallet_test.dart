@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:test/test.dart';
-import 'package:web3dart/src/credentials/wallet.dart';
-import 'package:web3dart/src/crypto/formatting.dart';
+import 'package:core_web3dart/src/credentials/wallet.dart';
+import 'package:core_web3dart/src/crypto/formatting.dart';
 
 import 'example_keystores.dart' as data;
 

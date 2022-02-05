@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:web3dart/crypto.dart';
+import 'package:core_web3dart/crypto.dart';
 import 'package:flutter_ed448/src/HDWallets/ed448_hd_wallets.dart';
 
 final ed448Wallet = Ed448HDWallet();

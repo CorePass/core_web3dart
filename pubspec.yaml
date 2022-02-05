@@ -1,7 +1,6 @@
-name: web3dart
+name: core_web3dart
 description: Dart library to connect to Core clients. Send transactions and interact with smart contracts!
 version: 2.3.3
-homepage: https://github.com/simolus3/web3dart
 publish_to: none
 
 environment:

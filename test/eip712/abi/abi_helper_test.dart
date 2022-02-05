@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
 import 'package:test/test.dart';
-import 'package:web3dart/src/crypto/formatting.dart';
-import 'package:web3dart/src/eip712/abi/abi_helper.dart';
+import 'package:core_web3dart/src/crypto/formatting.dart';
+import 'package:core_web3dart/src/eip712/abi/abi_helper.dart';
 
 main() {
   final abiHepler = ABIHelper();

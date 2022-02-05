@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
-import 'package:web3dart/crypto.dart';
-import 'package:web3dart/src/eip712/abi/abi_helper.dart';
-import 'package:web3dart/src/eip712/utils/contants.dart';
-import 'package:web3dart/src/eip712/utils/crypto.dart';
+import 'package:core_web3dart/crypto.dart';
+import 'package:core_web3dart/src/eip712/abi/abi_helper.dart';
+import 'package:core_web3dart/src/eip712/utils/contants.dart';
+import 'package:core_web3dart/src/eip712/utils/crypto.dart';
 
 class EIP712 {
   final _crypto = Crypto();

@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
 import 'package:test/test.dart';
-import 'package:web3dart/crypto.dart';
-import 'package:web3dart/src/eip712/core/eip712.dart';
-import 'package:web3dart/web3dart.dart';
+import 'package:core_web3dart/crypto.dart';
+import 'package:core_web3dart/src/eip712/core/eip712.dart';
+import 'package:core_web3dart/web3dart.dart';
 
 import '../constants/consts.dart';
 

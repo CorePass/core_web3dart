@@ -3,7 +3,7 @@ import 'package:code_builder/code_builder.dart' hide FunctionType;
 import '../../contracts.dart';
 import '../../web3dart.dart';
 
-const package = 'package:web3dart/web3dart.dart';
+const package = 'package:core_web3dart/web3dart.dart';
 
 TypeReference referType(String name, [String? uri]) {
   return TypeReference((b) => b

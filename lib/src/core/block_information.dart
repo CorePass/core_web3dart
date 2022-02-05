@@ -1,5 +1,5 @@
-import 'package:web3dart/src/crypto/formatting.dart';
-import 'package:web3dart/web3dart.dart';
+import 'package:core_web3dart/src/crypto/formatting.dart';
+import 'package:core_web3dart/web3dart.dart';
 
 import '../../web3dart.dart';
 import '../crypto/formatting.dart';

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:web3dart/credentials.dart';
-import 'package:web3dart/crypto.dart';
-import 'package:web3dart/src/utils/typed_data.dart';
+import 'package:core_web3dart/credentials.dart';
+import 'package:core_web3dart/crypto.dart';
+import 'package:core_web3dart/src/utils/typed_data.dart';
 
 /// The sign method from ed448, so that it can be used inside [Credentials].
 

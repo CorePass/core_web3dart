@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:test/test.dart';
 
-import 'package:web3dart/contracts.dart';
-import 'package:web3dart/src/credentials/address.dart';
-import 'package:web3dart/src/crypto/formatting.dart';
+import 'package:core_web3dart/contracts.dart';
+import 'package:core_web3dart/src/credentials/address.dart';
+import 'package:core_web3dart/src/crypto/formatting.dart';
 
 import 'data/basic_abi_tests.dart' as basic;
 import 'data/integers.dart' as ints;
