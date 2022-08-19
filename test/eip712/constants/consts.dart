@@ -72,41 +72,36 @@ final TEST_TYPES = {
 final Map<String, dynamic> TEST_TYPED_DATA_2 = {
   "domain": {
     // Defining the chain aka Rinkeby testnet or Core Main Net
-    "chainId": 1,
+    "networkID": 1,
     // Give a user friendly name to the specific contract you are signing for.
     "name": 'Core Mail',
     // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
-    "verifyingContract": '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+    "verifyingContract": 'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
     // Just let's you know the latest version. Definitely make sure the field name is correct.
     "version": '1',
   },
 
   // Defining the message signing data content.
   "message": {
-    /*
-     - Anything you want. Just a JSON Blob that encodes the data you want to send
-     - No required fields
-     - This is DApp Specific
-     - Be as explicit as possible when building out the message schema.
-    */
-    "contents": 'Hello, Bob!',
     "from": {
       "name": 'Cow',
       "wallets": [
-        '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-        '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
+        'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
+        'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
       ],
     },
-    "to": [
-      {
-        "name": 'Bob',
-        "wallets": [
-          '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
-          '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
-          '0xB0B0b0b0b0b0B000000000000000000000000000',
-        ],
-      },
-    ],
+    // "to":
+    // [
+    //   {
+    //     "name": 'Bob',
+    //     "wallets": [
+    //       'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
+    //       'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
+    //       'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
+    //     ],
+    //   },
+    // ],
+    // "contents": 'Hello, Bob!',
   },
   // Refers to the keys of the *types* object below.
   "primaryType": 'Mail',
@@ -115,19 +110,15 @@ final Map<String, dynamic> TEST_TYPED_DATA_2 = {
     "EIP712Domain": [
       {"name": 'name', "type": 'string'},
       {"name": 'version', "type": 'string'},
-      {"name": 'chainId', "type": 'uint256'},
+      {"name": 'networkID', "type": 'uint256'},
       {"name": 'verifyingContract', "type": 'address'},
     ],
-    // Not an EIP712Domain definition
-    "Group": [
-      {"name": 'name', "type": 'string'},
-      {"name": 'members', "type": 'Person[]'},
-    ],
+
     // Refer to Primary"Type"
     "Mail": [
       {"name": 'from', "type": 'Person'},
-      {"name": 'to', "type": 'Person[]'},
-      {"name": 'contents', "type": 'string'},
+      // {"name": 'to', "type": 'Person[]'},
+      // {"name": 'contents', "type": 'string'},
     ],
     // Not an EIP712Domain definition
     "Person": [
@@ -528,5 +519,30 @@ final TEST_TYPED_DATA_4 = {
     "amount": 50,
     "nonce": 0,
     "deadline": 1624372301,
+  },
+};
+final Map<String, dynamic> TEST_TYPED_DATA_GO_CORE = {
+  "domain": {
+    "name": "test",
+    "version": "1",
+    "networkID": 1337,
+    "verifyingContract": "cb66b41bf4b4a9494a071f7c5479425f830629d6cc9f",
+  },
+  "primaryType": 'test',
+  "types": {
+    "EIP712Domain": [
+      {"name": 'name', "type": 'string'},
+      {"name": 'version', "type": 'string'},
+      {"name": 'networkID', "type": 'uint256'},
+      {"name": 'verifyingContract', "type": 'address'},
+    ],
+    "test": [
+      {"name": "name", "type": "string"},
+      {"name": "age", "type": "uint8"},
+    ],
+  },
+  "message": {
+    "name": "test2",
+    "age": 18,
   },
 };

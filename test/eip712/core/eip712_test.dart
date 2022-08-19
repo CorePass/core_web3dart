@@ -5,7 +5,6 @@ import 'package:hex/hex.dart';
 import 'package:test/test.dart';
 import 'package:core_web3dart/crypto.dart';
 import 'package:core_web3dart/src/eip712/core/eip712.dart';
-import 'package:core_web3dart/web3dart.dart';
 
 import '../constants/consts.dart';
 

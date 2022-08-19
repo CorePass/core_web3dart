@@ -111,9 +111,9 @@ String calculateCheckSum(Uint8List address, Uint8List prefix) {
 String getNetworkIdPrefix(int networkId) {
   if (networkId == 1) {
     return "cb";
-  } else if (networkId == 3 || networkId == 4) {
+  } else if (networkId == 3) {
     return "ab";
-  } else if ((networkId > 10) || networkId == 0) {
+  } else if (networkId >= 4) {
     return "ce";
   } else {
     throw new Exception("Invalid Network Id");

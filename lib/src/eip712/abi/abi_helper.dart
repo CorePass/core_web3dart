@@ -43,7 +43,7 @@ class ABIHelper {
 // @returns: Buffer
   encodeSingle(String type, arg) {
     if (type == 'address') {
-      return encodeSingle('uint160', parseNumber(arg));
+      return encodeSingle('uint176', parseNumber(arg));
     } else if (type == 'bool') {
       return encodeSingle('uint8', arg ? 1 : 0);
     } else if (type == 'string') {
@@ -128,8 +128,8 @@ class ABIHelper {
 
   BigInt parseNumber(arg) {
     if (arg is String) {
-      if (hexHasPrefix(arg)) {
-        return BigInt.parse(strip0x(arg), radix: 16);
+      if (hasAddrPrefix(arg)) {
+        return BigInt.parse((arg), radix: 16);
       } else {
         return BigInt.parse(arg, radix: 10);
       }
@@ -231,4 +231,10 @@ class ABIHelper {
         (type == 'bytes') ||
         (parseTypeArray(type) == 'dynamic');
   }
+
+  bool hasAddrPrefix(String input) =>
+      input.startsWith("cb") ||
+      input.startsWith("ab") ||
+      input.startsWith("ce");
+  String stripAddrPrefix(String input) => input.substring(2);
 }
