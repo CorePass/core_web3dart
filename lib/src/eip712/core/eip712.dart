@@ -6,10 +6,8 @@ import 'package:hex/hex.dart';
 import 'package:core_web3dart/crypto.dart';
 import 'package:core_web3dart/src/eip712/abi/abi_helper.dart';
 import 'package:core_web3dart/src/eip712/utils/contants.dart';
-import 'package:core_web3dart/src/eip712/utils/crypto.dart';
 
 class EIP712 {
-  final _crypto = Crypto();
   final _abiHelper = ABIHelper();
 
   /// Get a signable message from the typed data, accepts `typedData` and `hash` and hash is used when you want the hashed result of the output (keccak hash which ethereum uses)
@@ -37,7 +35,7 @@ class EIP712 {
     final message = Uint8List.fromList(
         [...EIP_191_PREFIX, ..._eip712DomainHash, ..._primaryTypeHash]);
     if (hash) {
-      final _res = HEX.encode(_crypto.hash(message));
+      final _res = HEX.encode(sha3_256(message));
       return include0x ? "0x$_res" : _res;
     }
     final _res = HEX.encode(message);
@@ -91,7 +89,7 @@ class EIP712 {
     Map<String, dynamic> types,
   ) {
     final encoded = encodeData(primaryType, data, types);
-    final hashed = _crypto.hash(Uint8List.fromList(HEX.decode(encoded)));
+    final hashed = sha3_256(Uint8List.fromList(HEX.decode(encoded)));
     return hashed;
   }
 
@@ -129,7 +127,7 @@ class EIP712 {
       if (value != null) {
         var _cc = encodeData(type, value, types);
         var _bb = Uint8List.fromList(HEX.decode(_cc));
-        _a = _crypto.hash(Uint8List.fromList(_bb));
+        _a = sha3_256(Uint8List.fromList(_bb));
       }
 
       return [
@@ -147,7 +145,7 @@ class EIP712 {
       if (value is String) {
         return [
           'bytes32',
-          _crypto.hash((Uint8List.fromList(HEX.decode(strip0x(value)))))
+          sha3_256((Uint8List.fromList(HEX.decode(strip0x(value)))))
         ];
       } else {
         throw Exception("not recognized type for $name with type $type");
@@ -157,7 +155,7 @@ class EIP712 {
     if (type == 'string') {
       // convert string to byteArray - prevents _crypto from interpreting strings like '0xabcd' as hex
       final _val = Uint8List.fromList(utf8.encode(value));
-      return ['bytes32', _crypto.hash(_val)];
+      return ['bytes32', sha3_256(_val)];
     }
 
     if (type.lastIndexOf(']') == type.length - 1) {
@@ -166,7 +164,7 @@ class EIP712 {
           value.map((item) => encodeField(name, parsedType, item, types));
       return [
         'bytes32',
-        _crypto.hash(
+        sha3_256(
           (_abiHelper.rawEncode(
               // MARK: 0 to get the types and 1 to get the values
               typeValuePairs.map((t) => t[0]).toList(),
@@ -179,8 +177,8 @@ class EIP712 {
   }
 
   Uint8List hashType(String primaryType, Map<String, dynamic> types) {
-    return _crypto
-        .hash(Uint8List.fromList(utf8.encode(encodeType(primaryType, types))));
+    return sha3_256(
+        Uint8List.fromList(utf8.encode(encodeType(primaryType, types))));
   }
 
   /**
