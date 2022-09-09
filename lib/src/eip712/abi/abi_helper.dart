@@ -235,7 +235,6 @@ class ABIHelper {
   bool hasAddrPrefix(String input) =>
       input.startsWith("cb") ||
       input.startsWith("ab") ||
-      input.startsWith("ce") ||
-      input.startsWith("0x");
+      input.startsWith("ce");
   String stripAddrPrefix(String input) => input.substring(2);
 }
