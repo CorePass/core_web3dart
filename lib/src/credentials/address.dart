@@ -4,6 +4,54 @@ import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:core_web3dart/crypto.dart';
 
+final _precompiledContracts = [
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
+    ),
+  ),
+  bytesToHex(
+    Uint8List.fromList(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+    ),
+  ),
+];
+
 /// Represents an Core Block Chain address.
 @immutable
 class XCBAddress {
@@ -46,6 +94,10 @@ class XCBAddress {
   }
 
   bool isValidAddress() {
+    if (_precompiledContracts.contains(bytesToHex(addressBytes))) {
+      return true;
+    }
+
     if (bytesToHex(addressBytes.sublist(1, 2)) !=
         calculateCheckSum(
             addressBytes.sublist(2), addressBytes.sublist(0, 1))) {
