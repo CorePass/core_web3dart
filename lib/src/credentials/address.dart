@@ -45,6 +45,16 @@ class XCBAddress {
     return XCBAddress(hexToBytes(hex));
   }
 
+  bool isValidAddress() {
+    if (bytesToHex(addressBytes.sublist(1, 2)) !=
+        calculateCheckSum(
+            addressBytes.sublist(2), addressBytes.sublist(0, 1))) {
+      return false;
+    }
+
+    return true;
+  }
+
   /// A hexadecimal representation of this address, padded to a length of 44
   /// characters or 22 bytes, and prefixed with "0x".
   String get hex =>
