@@ -12,7 +12,7 @@ void main() {
 
   test('creates signature', () {
     expect(bytesToHex(event.signature),
-        'ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef');
+        'c17a9d92b89f27cb79cc390f23a1a5d302fefab8c7911075ede952ac2b5607a1');
   });
 
   test('decodes return data', () {
