@@ -18,7 +18,7 @@ void main() {
         eip712.getMessageForSign(
           typedData: TEST_TYPED_DATA_2,
         ),
-        "0x35568947d4db921253b80320d4609e9be581e9eb43dc20c3d955434d01a52301");
+        "0xd902c81791cdda6e20059a0f5e75f67bfee297427bfc1e6468c731ad24ab3ac4");
     expect(
         eip712.getMessageForSign(
           typedData: TEST_TYPED_DATA_3,

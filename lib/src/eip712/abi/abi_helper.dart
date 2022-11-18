@@ -129,7 +129,7 @@ class ABIHelper {
   BigInt parseNumber(arg) {
     if (arg is String) {
       if (hasAddrPrefix(arg)) {
-        return BigInt.parse(stripAddrPrefix(arg), radix: 16);
+        return BigInt.parse(strip0x(arg), radix: 16);
       } else {
         return BigInt.parse(arg, radix: 10);
       }
