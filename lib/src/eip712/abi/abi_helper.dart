@@ -129,7 +129,7 @@ class ABIHelper {
   BigInt parseNumber(arg) {
     if (arg is String) {
       if (hasAddrPrefix(arg)) {
-        return BigInt.parse((arg), radix: 16);
+        return BigInt.parse(strip0x(arg), radix: 16);
       } else {
         return BigInt.parse(arg, radix: 10);
       }
@@ -235,6 +235,7 @@ class ABIHelper {
   bool hasAddrPrefix(String input) =>
       input.startsWith("cb") ||
       input.startsWith("ab") ||
-      input.startsWith("ce");
+      input.startsWith("ce") ||
+      input.startsWith("0x");
   String stripAddrPrefix(String input) => input.substring(2);
 }

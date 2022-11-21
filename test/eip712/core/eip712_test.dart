@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
 import 'package:test/test.dart';
-import 'package:core_web3dart/crypto.dart';
 import 'package:core_web3dart/src/eip712/core/eip712.dart';
 
 import '../constants/consts.dart';
@@ -15,22 +13,22 @@ void main() {
         eip712.getMessageForSign(
           typedData: TEST_TYPED_DATA,
         ),
-        "0x16172e4ec2553f8a69a47f2f0d8fbd7bb036a0f65348c32dbd5f7f0fb7f040c0");
+        "0x3402b6e10b1933e0060f3d36b08e594b29958d34cf869b56138303a448034b55");
     expect(
         eip712.getMessageForSign(
           typedData: TEST_TYPED_DATA_2,
         ),
-        "0xa85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2");
+        "0xd902c81791cdda6e20059a0f5e75f67bfee297427bfc1e6468c731ad24ab3ac4");
     expect(
         eip712.getMessageForSign(
           typedData: TEST_TYPED_DATA_3,
         ),
-        "0xed0727841a7250e119946c02ca9e85f40c4ddd28f805954b3e495a4622b177af");
+        "0x2676a1ec8b4e8bcf83336c4601872c867d23a7ba76b133da44da3f1a3a5dc035");
     expect(
         eip712.getMessageForSign(
           typedData: TEST_TYPED_DATA_4,
         ),
-        "0x842dbd7696b8b4c7be71192bef971f5f909a51322ec0f056277fa384ba46b415");
+        "0xf9e3df6d6f790371ef02cc68b2e4ab0995b633611b2fc3c8a636d4fd7527080d");
   });
   test('sanitizer works correctly', () {
     expect(eip712.sanitizeData(TEST_TYPED_DATA), SANITIZED_TYPED_DATA);
@@ -51,13 +49,13 @@ void main() {
   test("hashType works correctly", () {
     final _hasRes1 = HEX.encode(eip712.hashType("EIP712Domain", TEST_TYPES));
     expect(_hasRes1,
-        "8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f");
+        "ddd4c7674758e5d4c23d41c55c47f7e721630ab5231f61f3fc4146a99a4880fe");
     final _hasRes2 = HEX.encode(eip712.hashType("Bounty", TEST_TYPES));
     expect(_hasRes2,
-        "c45ff68f110559a1e8268337170ac7c09eff079f5ac0c321e575a080cd3118bd");
+        "3eb5d7e624f143ef15cf199637c60dfa3596cd0a2d5493d45256019eebf3223a");
     final _hasRes3 = HEX.encode(eip712.hashType("Mail", TEST_TYPES_2));
     expect(_hasRes3,
-        "4bd8a9a2b93427bb184aca81e24beb30ffa3c747e2a33d4225ec08bf12e2e753");
+        "fb4baac61f69c6f67857383b588ba10ecf8f4ba21a79337623d882825f9e4a79");
   });
   test("encodeData is working corectly", () {
     expect(
@@ -84,7 +82,7 @@ void main() {
               ],
             },
             TEST_TYPES_2),
-        "4bd8a9a2b93427bb184aca81e24beb30ffa3c747e2a33d4225ec08bf12e2e7539b4846dd48b866f0ac54d61b9b21a9e746f921cefa4ee94c4c0a1c49c774f67fca322beec85be24e374d18d582a6f2997f75c54e7993ab5bc07404ce176ca7cdb5aadf3154a261abdd9086fc627b61efca26ae5702701d05cd2305f7c52a2fc8");
+        "fb4baac61f69c6f67857383b588ba10ecf8f4ba21a79337623d882825f9e4a796366c51b8923fca0a4bd591b0c9202a9e6cb62dcba9138ceef728778d10270b451666d5a2b98986905494eecb6358efe4ca3ad827bababd689f125c8ee549379b58543c145f315ad2c9210b45c29c13e6c9fc5396a140d3b07f766925fda360e");
     expect(
         eip712.encodeData(
             "EIP712Domain",
@@ -95,7 +93,7 @@ void main() {
               "verifyingContract": '0x7A9Ec1d04904907De0ED7b6839CcdD59c3716AC9'
             },
             TEST_TYPES),
-        "8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f295a1eee18326a1bf3a3453f94aff9bd734f9f997608e90e73dc075210e7b11ec89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc60000000000000000000000000000000000000000000000000000000000007a690000000000000000000000007a9ec1d04904907de0ed7b6839ccdd59c3716ac9");
+        "ddd4c7674758e5d4c23d41c55c47f7e721630ab5231f61f3fc4146a99a4880fea3f78a5c1a86adfee0a48f53d25cdc1198cda9d54e3eae7031faf8a3c639199667b176705b46206614219f47a05aee7ae6a3edbe850bbbe214c536b989aea4d20000000000000000000000000000000000000000000000000000000000007a690000000000000000000000007a9ec1d04904907de0ed7b6839ccdd59c3716ac9");
     expect(
         eip712.encodeData(
             "EIP712Domain",
@@ -106,7 +104,7 @@ void main() {
               "version": "1",
             },
             TEST_TYPES_2),
-        "8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400fc70ef06638535b4881fafcac8287e210e3769ff1a8e91f1b95d6246e61e4d3c6c89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc60000000000000000000000000000000000000000000000000000000000000001000000000000000000000000cccccccccccccccccccccccccccccccccccccccc");
+        "ddd4c7674758e5d4c23d41c55c47f7e721630ab5231f61f3fc4146a99a4880fe1824f9815a3fa3af4b631c8e445249a8b59390837501c5a9aa72a5e28535d4e767b176705b46206614219f47a05aee7ae6a3edbe850bbbe214c536b989aea4d20000000000000000000000000000000000000000000000000000000000000001000000000000000000000000cccccccccccccccccccccccccccccccccccccccc");
     expect(
         eip712.encodeData(
             "Bounty",
@@ -118,7 +116,7 @@ void main() {
               "deadline": 1624373141
             },
             TEST_TYPES),
-        "c45ff68f110559a1e8268337170ac7c09eff079f5ac0c321e575a080cd3118bd0000000000000000000000007a9ec1d04904907de0ed7b6839ccdd59c3716ac95f613c6be2378d6df7858b314c3a2c48dbace67d10153b54b2ba5a9d9b3f5038000000000000000000000000000000000000000000000000000000000000003200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060d1f795");
+        "3eb5d7e624f143ef15cf199637c60dfa3596cd0a2d5493d45256019eebf3223a0000000000000000000000007a9ec1d04904907de0ed7b6839ccdd59c3716ac97b8b9fc3be3033749eb3f83157dd20dbfefaef6a8ea0538b24434374439a8f23000000000000000000000000000000000000000000000000000000000000003200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060d1f795");
     expect(
         eip712.encodeData(
             "Person",
@@ -130,7 +128,7 @@ void main() {
               ],
             },
             TEST_TYPES_2),
-        "fabfe1ed996349fc6027709802be19d047da1aa5d6894ff5f6486d92db2e68608c1d2bd5348394761719da11ec67eedae9502d137e8940fee8ecd6f641ee16488a8bfe642b9fc19c25ada5dadfd37487461dc81dd4b0778f262c163ed81b5e2a");
+        "1014221b846c7f0e0f67d9894ff14430d19c6bab520a7b20fd21861971f94d39cbfe11cbdd252b33144a30cfb7e1510879f2109187ee218e341f3ac903347d3b667abff5202477d232933f89b33446e6a4c2958504eb633b197d06a67d3fc1b6");
     expect(
         eip712.encodeData(
             "Person",
@@ -143,7 +141,7 @@ void main() {
               ],
             },
             TEST_TYPES_2),
-        "fabfe1ed996349fc6027709802be19d047da1aa5d6894ff5f6486d92db2e686028cac318a86c8a0a6a9156c2dba2c8c2363677ba0514ef616592d81557e679b6d2734f4c86cc3bd9cabf04c3097589d3165d95e4648fc72d943ed161f651ec6d");
+        "1014221b846c7f0e0f67d9894ff14430d19c6bab520a7b20fd21861971f94d39b50b22901ba019b7f48327a891d21a9af254749359c76f1f4755bd28c49c33ab00a3bd9a6ea270bf07e204406811a9927426d4359240fb41459d538b16a565fd");
   });
   test("encodeField works correctly", () {
     expect(
@@ -161,7 +159,7 @@ void main() {
         [
           "bytes32",
           Uint8List.fromList(HEX.decode(
-              "9b4846dd48b866f0ac54d61b9b21a9e746f921cefa4ee94c4c0a1c49c774f67f"))
+              "6366c51b8923fca0a4bd591b0c9202a9e6cb62dcba9138ceef728778d10270b4"))
         ]);
     expect(
         eip712.encodeField(
@@ -181,13 +179,13 @@ void main() {
         [
           "bytes32",
           Uint8List.fromList(HEX.decode(
-              "ca322beec85be24e374d18d582a6f2997f75c54e7993ab5bc07404ce176ca7cd"))
+              "51666d5a2b98986905494eecb6358efe4ca3ad827bababd689f125c8ee549379"))
         ]);
     expect(
         eip712.encodeField("contents", "string", "Hello, Bob!", TEST_TYPES_2), [
       "bytes32",
       Uint8List.fromList(HEX.decode(
-          "b5aadf3154a261abdd9086fc627b61efca26ae5702701d05cd2305f7c52a2fc8"))
+          "b58543c145f315ad2c9210b45c29c13e6c9fc5396a140d3b07f766925fda360e"))
     ]);
     // for int
     expect(eip712.encodeField('chainId', 'uint256', 31337, TEST_TYPES),
@@ -204,76 +202,76 @@ void main() {
         [
           'bytes32',
           Uint8List.fromList([
-            41,
-            90,
-            30,
-            238,
-            24,
-            50,
-            106,
-            27,
-            243,
             163,
-            69,
-            63,
-            148,
-            175,
-            249,
-            189,
-            115,
-            79,
-            159,
-            153,
-            118,
-            8,
-            233,
-            14,
-            115,
+            247,
+            138,
+            92,
+            26,
+            134,
+            173,
+            254,
+            224,
+            164,
+            143,
+            83,
+            210,
+            92,
             220,
-            7,
-            82,
-            16,
-            231,
-            177,
-            30
+            17,
+            152,
+            205,
+            169,
+            213,
+            78,
+            62,
+            174,
+            112,
+            49,
+            250,
+            248,
+            163,
+            198,
+            57,
+            25,
+            150
           ])
         ]);
     // for bytes
     expect(eip712.encodeField('data', 'bytes', '0x713d3e3e', TEST_TYPES), [
       'bytes32',
       Uint8List.fromList([
-        95,
-        97,
-        60,
-        107,
-        226,
-        55,
-        141,
-        109,
-        247,
-        133,
+        123,
         139,
+        159,
+        195,
+        190,
+        48,
+        51,
+        116,
+        158,
+        179,
+        248,
         49,
-        76,
-        58,
-        44,
-        72,
+        87,
+        221,
+        32,
         219,
-        172,
-        230,
-        125,
-        16,
-        21,
-        59,
-        84,
-        178,
-        186,
-        90,
-        157,
-        155,
-        63,
-        80,
-        56
+        254,
+        250,
+        239,
+        106,
+        142,
+        160,
+        83,
+        139,
+        36,
+        67,
+        67,
+        116,
+        67,
+        154,
+        143,
+        35
       ])
     ]);
   });

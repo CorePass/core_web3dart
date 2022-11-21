@@ -12,7 +12,7 @@ void main() {
 
   test('creates signature', () {
     expect(bytesToHex(event.signature),
-        'ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef');
+        'c17a9d92b89f27cb79cc390f23a1a5d302fefab8c7911075ede952ac2b5607a1');
   });
 
   test('decodes return data', () {
@@ -27,8 +27,8 @@ void main() {
     final decoded = event.decodeResults(topics, data);
 
     expect(decoded, [
-      XCBAddress.fromHex('0xDd611f2b2CaF539aC9e12CF84C09CB9bf81CA37F'),
-      XCBAddress.fromHex('0x6c87E1a114C3379BEc929f6356c5263d62542C13'),
+      XCBAddress.fromHex('0000Dd611f2b2CaF539aC9e12CF84C09CB9bf81CA37F'),
+      XCBAddress.fromHex('00006c87E1a114C3379BEc929f6356c5263d62542C13'),
       BigInt.from(0x1234),
     ]);
   });

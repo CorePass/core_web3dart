@@ -12,6 +12,7 @@ void main() {
   "blockNumber": "0x18",
   "contractAddress": "cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5",
   "cumulativeEnergyUsed": "0x4cc5f",
+  "energyUsed": "0x4cc5f",
   "from": "cb82a5fd22b9bee8b8ab877c86e0a2c21765e1d5bfc5",
   "gasUsed": "0x4cc5f",
   "logs": [

@@ -15,7 +15,7 @@ const content = '''
           "prf" : "hmac-sha256",
           "salt" : "ae3cd4e7013836a3df6bd7241b12db061dbe2c6785853cce422d148a624ce0bd"
         },
-        "mac" : "517ead924a9d0dc3124507e3393d175ce3ff7c1e96529c6c555ce9e51205e9b2"
+        "mac" : "fb132cf2e0ab51ff37571e45011c37daf12383bfa93e2fc4744b4d7e9493c39a"
       },
       "id" : "3198bc9c-6672-5ab3-d995-4942343ae5b6",
       "version" : 3
@@ -39,7 +39,7 @@ const content = '''
           "p" : 8,
           "salt" : "ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19"
         },
-        "mac" : "2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097"
+        "mac" : "8afa141f3a677e33435e34b0eaa5a846454c8487c189d28dca2fe376eb0bb364"
       },
       "id" : "3198bc9c-6672-5ab3-d995-4942343ae5b6",
       "version" : 3
@@ -60,7 +60,7 @@ const content = '''
           "prf": "hmac-sha256",
           "salt": "504490577620f64f43d73f29479c2cf0"
         },
-        "mac": "196815708465de9af7504144a1360d08874fc3c30bb0e648ce88fbc36830d35d",
+        "mac": "ec5b64aaacc05fa541909e34463c170c7bcd434f9f599cae76a85ab51a5973cd",
         "cipherparams": {
           "iv": "514ccc8c4fb3e60e5538e0cf1e27c233"
         },
@@ -86,7 +86,7 @@ const content = '''
           "prf": "hmac-sha256",
           "salt": "c82ef14476014cbf438081a42709e2ed"
         },
-        "mac": "cf6bfbcc77142a22c4a908784b4a16f1023a1d0e2aff404c20158fa4f1587177",
+        "mac": "fe87a2fa4db5a3d0215731e9220fd06abd0b418782cc716e598d1bd7b4502f47",
         "cipher": "aes-128-ctr",
         "version": 1
       },
