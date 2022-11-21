@@ -16,7 +16,7 @@ more!
 
 ## Usage
 
-## Network ID
+### Network ID
 In order to send transactions, extract addresses, etc. network id of which you want to do these operations on must be acquired.
 ```dart
 var rpcUrl = "http://localhost:7545"; //Replace with your RPC
