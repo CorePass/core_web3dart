@@ -56,7 +56,7 @@ final _precompiledContracts = [
 @immutable
 class XCBAddress {
   static final xcbAddrLength = 44;
-  static final RegExp _basicAddress =
+  static final RegExp basicAddress =
       RegExp(r'^(cb)|(ce)|(ab)?[0-9a-f]{42}', caseSensitive: false);
 
   /// The length of an ethereum address, in bytes.
@@ -81,7 +81,7 @@ class XCBAddress {
   factory XCBAddress.fromHex(
     String hex,
   ) {
-    if (!_basicAddress.hasMatch(hex)) {
+    if (!basicAddress.hasMatch(hex)) {
       throw ArgumentError.value(hex, 'address',
           'Must be a hex string with a length of $xcbAddrLength');
     }
