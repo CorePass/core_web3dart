@@ -72,7 +72,6 @@ Uint8List _signTransaction(
   final encoded = uint8ListFromList(_enLp);
   final signature = c.signToSignature(encoded, networkId: networkId.toInt());
   final _sigEnRlp = _encodeToRlp(transaction, signature, networkId);
-  print(_sigEnRlp.toString());
   final _sigLp = rlp.encode(_sigEnRlp);
   final _res = uint8ListFromList(_sigLp);
 
