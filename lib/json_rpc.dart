@@ -46,8 +46,6 @@ class JsonRPC extends RpcService {
     };
 
     final auth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    print("req is this to $function");
-    print(json.encode(requestPayload));
     final response = await client.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json', 'authorization': auth},
