@@ -200,7 +200,7 @@ class Web3Client {
   Future<XCBAmount> getBalance(XCBAddress address, {BlockNum? atBlock}) {
     final blockParam = _getBlockParam(atBlock);
 
-    return _makeRPCCall<String>('xcb_getBalance', [address.hex, blockParam])
+    return _makeRPCCall<String>('xcb_getBalance', [address.hexNo0x, blockParam])
         .then((data) {
       return XCBAmount.fromUnitAndValue(XCBUnit.ore, hexToInt(data));
     });
@@ -217,7 +217,7 @@ class Web3Client {
     final blockParam = _getBlockParam(atBlock);
 
     return _makeRPCCall<String>('xcb_getStorageAt', [
-      address.hex,
+      address.hexNo0x,
       '0x${position.toRadixString(16)}',
       blockParam
     ]).then(hexToBytes);
@@ -231,7 +231,7 @@ class Web3Client {
     final blockParam = _getBlockParam(atBlock);
 
     return _makeRPCCall<String>(
-            'xcb_getTransactionCount', [address.hex, blockParam])
+            'xcb_getTransactionCount', [address.hexNo0x, blockParam])
         .then((hex) => hexToInt(hex).toInt());
   }
 
@@ -256,7 +256,8 @@ class Web3Client {
   /// historical data. By default, [BlockNum.current] will be used.
   Future<Uint8List> getCode(XCBAddress address, {BlockNum? atBlock}) {
     return _makeRPCCall<String>(
-        'xcb_getCode', [address.hex, _getBlockParam(atBlock)]).then(hexToBytes);
+            'xcb_getCode', [address.hexNo0x, _getBlockParam(atBlock)])
+        .then(hexToBytes);
   }
 
   /// Returns all logs matched by the filter in [options].
@@ -372,8 +373,8 @@ class Web3Client {
       'xcb_estimateEnergy',
       [
         {
-          if (sender != null) 'from': sender.hex,
-          if (to != null) 'to': to.hex,
+          if (sender != null) 'from': sender.hexNo0x,
+          if (to != null) 'to': to.hexNo0x,
           if (amountOfEnergy != null)
             'energy': '0x${amountOfEnergy.toRadixString(16)}',
           if (energyPrice != null)
@@ -408,9 +409,9 @@ class Web3Client {
     BlockNum? atBlock,
   }) {
     final call = {
-      'to': contract.hex,
+      'to': contract.hexNo0x,
       'data': bytesToHex(data, include0x: true, padToEvenLength: true),
-      if (sender != null) 'from': sender.hex,
+      if (sender != null) 'from': sender.hexNo0x,
     };
 
     return _makeRPCCall<String>('xcb_call', [call, _getBlockParam(atBlock)]);
