@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:build/build.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:code_builder/code_builder.dart';
+import 'package:core_web3dart/src/builder/recase.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:path/path.dart';
 import 'package:core_web3dart/contracts.dart';
-import 'package:core_web3dart/src/crypto/formatting.dart';
 
 import 'documentation.dart';
 import 'utils.dart';
@@ -52,6 +52,7 @@ class ContractGenerator implements Builder {
   String _suggestName(String pathWithoutExtension) {
     final base = basename(pathWithoutExtension);
     return base[0].toUpperCase() + base.substring(1);
+    // return base.titleCase;
   }
 
   //main method that parses abi to dart code
@@ -120,7 +121,7 @@ class _ContractGeneration {
         ..add(Block((b) => b
           ..addExpression(contractAbi.newInstanceNamed(
             'fromJson',
-            [literalString(_abiCode), literalString(_abi.name)],
+            [literalString(_abiCode), literalString(_abi.name.titleCase)],
           ).assignFinal('_contractAbi'))))
         ..add(Class(_createContractClass))
         ..addAll(_additionalSpecs);
@@ -129,7 +130,7 @@ class _ContractGeneration {
 
   void _createContractClass(ClassBuilder b) {
     b
-      ..name = _abi.name
+      ..name = _abi.name.titleCase
       ..extend = generatedContract
       ..constructors.add(Constructor(_createContractConstructor));
 
