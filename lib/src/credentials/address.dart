@@ -57,7 +57,7 @@ final _precompiledContracts = [
 class XCBAddress {
   static final xcbAddrLength = 44;
   static final RegExp basicAddress =
-      RegExp(r'(^(cb)|^(ce)|^(ab))[0-9a-f]{42}', caseSensitive: false);
+      RegExp(r'((cb)|(ce)|(ab))[0-9a-f]{42}', caseSensitive: false);
 
   /// The length of an ethereum address, in bytes.
   static const addressByteLength = 22;
