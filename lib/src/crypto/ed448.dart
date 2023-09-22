@@ -23,9 +23,8 @@ Uint8List privateKeyToPublic(BigInt privateKey) {
 
 /// Generates a new private key using the seed. Please make
 /// sure you're using a cryptographically secure generator.
-BigInt generateNewPrivateKey(String seed, int index) {
-  final response = ed448Wallet.HDWalletGenerateKey(hexToBytes(seed), index);
-  return bytesToInt(response);
+Uint8List generateNewPrivateKey(String seed, int index) {
+  return ed448Wallet.HDWalletGenerateKey(hexToBytes(seed), index);
 }
 
 /// Constructs the core blockchain address associated with the given public key by
