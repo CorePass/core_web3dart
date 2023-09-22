@@ -1,4 +1,5 @@
 import 'package:core_web3dart/credentials.dart';
+import 'package:core_web3dart/crypto.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -41,7 +42,7 @@ void main() {
     test(
       'valid addresses validation',
       () {
-        final address = XCBAddress.fromHex(validAddr);
+        final address = XCBAddress(hexToBytes(validAddr));
         expect(address.isValidAddress(), true);
       },
     );
