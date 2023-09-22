@@ -1,6 +1,6 @@
 name: core_web3dart
 description: Dart library to connect to Core clients. Send transactions and interact with smart contracts!
-version: 2.3.9
+version: 2.4.9
 publish_to: none
 
 environment:
