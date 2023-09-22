@@ -76,7 +76,7 @@ class XCBPrivateKey extends Credentials {
   /// use [Random.secure()].
   factory XCBPrivateKey.createPrivateKey(String seed, int index) {
     final key = generateNewPrivateKey(seed, index);
-    return XCBPrivateKey(intToBytes(key));
+    return XCBPrivateKey(key);
   }
   @override
   Uint8List signToSignature(Uint8List payload, {required int networkId}) {
