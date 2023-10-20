@@ -28,6 +28,7 @@ export 'src/core/amount.dart';
 export 'src/core/block_information.dart';
 export 'src/core/block_number.dart';
 export 'src/core/sync_information.dart';
+export 'src/eip712/core/eip712.dart';
 
 part 'src/core/client.dart';
 part 'src/core/filters.dart';
