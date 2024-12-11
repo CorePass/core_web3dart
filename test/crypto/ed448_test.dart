@@ -1,7 +1,7 @@
-import 'package:http/http.dart';
-import 'package:test/test.dart';
 import 'package:core_web3dart/crypto.dart';
 import 'package:core_web3dart/web3dart.dart';
+import 'package:http/http.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('correct address generation from private key', () {
