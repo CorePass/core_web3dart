@@ -68,7 +68,7 @@ class ContractGenerator implements Builder {
 ${library.accept(emitter)}''';
 
     try {
-      return DartFormatter().format(source);
+      return DartFormatter(languageVersion: DartFormatter.latestLanguageVersion).format(source);
     } on Object {
       // The source couldn't be parsed. Emit it anyways to make debugging the
       // generator easier, but this is likely our fault.

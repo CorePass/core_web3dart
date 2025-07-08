@@ -39,4 +39,5 @@ out/
 # Generated test coverage
 coverage.json
 lcov.info
-test_coverage
+test_coverage.history/
+.history/
