@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   publish:
@@ -26,15 +25,10 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
-      - name: Verify release tag
-        shell: bash
+      - name: Set up pub.dev credentials
         run: |
-          package_version="$(awk '/^version:/ { print $2; exit }' pubspec.yaml)"
-          release_tag="${GITHUB_REF_NAME#v}"
-          if [[ "$release_tag" != "$package_version" ]]; then
-            echo "Release tag $GITHUB_REF_NAME does not match package version $package_version."
-            exit 1
-          fi
+          mkdir -p "$HOME/.config/dart"
+          printf '%s' '${{ secrets.PUB_CREDENTIALS_JSON }}' | jq '.' > "$HOME/.config/dart/pub-credentials.json"
 
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .

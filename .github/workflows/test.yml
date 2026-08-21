@@ -3,11 +3,11 @@ name: Testing
 on:
   push:
     branches:
-      - core-master
+      - master
       - main
   pull_request:
     branches:
-      - core-master
+      - master
       - main
 
 permissions:
