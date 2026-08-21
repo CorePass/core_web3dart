@@ -14,84 +14,86 @@ void main() {
     {
       'name': 'one topic',
       'input': [
-        [alice]
+        [alice],
       ],
       'expected': [
-        [alice]
-      ]
+        [alice],
+      ],
     },
     {
       'name': 'two topics one item',
       'input': [
-        [alice, bob]
+        [alice, bob],
       ],
       'expected': [
-        [alice, bob]
-      ]
+        [alice, bob],
+      ],
     },
     {
       'name': 'two topics two items',
       'input': [
         [alice],
-        [bob]
+        [bob],
       ],
       'expected': [
         [alice],
-        [bob]
-      ]
+        [bob],
+      ],
     },
     {
       'name': 'two topics first null',
       'input': [
         [],
-        [bob]
+        [bob],
       ],
       'expected': [
         null,
-        [bob]
-      ]
+        [bob],
+      ],
     },
     {
       'name': 'three topics first null',
       'input': [
         [],
         [alice],
-        [bob]
+        [bob],
       ],
       'expected': [
         null,
         [alice],
-        [bob]
-      ]
+        [bob],
+      ],
     },
     {
       'name': 'three topics second null',
       'input': [
         [alice],
         [],
-        [bob]
+        [bob],
       ],
       'expected': [
         [alice],
         null,
-        [bob]
-      ]
-    }
+        [bob],
+      ],
+    },
   ];
 
   Future _runFilterTest(input, expected) async {
-    final client = MockClient(expectAsync2((method, params) {
-      expect(method, 'xcb_getLogs');
+    final client = MockClient(
+      expectAsync2((method, params) {
+        expect(method, 'xcb_getLogs');
 
-      // verify that the topics are sent to xcb_getLogs in the correct format
-      final actual = ((params as List)[0])['topics'];
-      expect(actual, expected);
+        // verify that the topics are sent to xcb_getLogs in the correct format
+        final actual = ((params as List)[0])['topics'];
+        expect(actual, expected);
 
-      // return a valid response from xcb_getLogs
-      return [
-        {'address': contract}
-      ];
-    }));
+        // return a valid response from xcb_getLogs
+        return [
+          {'address': contract},
+        ];
+      }),
+    );
 
     final web3 = Web3Client('', client, '', '');
     addTearDown(web3.dispose);
@@ -113,10 +115,11 @@ void main() {
     });
 
     final filter = FilterOptions(
-        fromBlock: const BlockNum.genesis(),
-        toBlock: const BlockNum.current(),
-        address: XCBAddress.fromHex(contract),
-        topics: topics);
+      fromBlock: const BlockNum.genesis(),
+      toBlock: const BlockNum.current(),
+      address: XCBAddress.fromHex(contract),
+      topics: topics,
+    );
 
     await web3.getLogs(filter);
   }

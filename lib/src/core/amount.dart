@@ -17,7 +17,7 @@ enum XCBUnit {
   ///micore, 10^15 ore or 1 mcore
   micore,
 
-  core
+  core,
 }
 
 /// Utility class to easily convert amounts of Core into different units of
@@ -30,7 +30,7 @@ class XCBAmount {
     XCBUnit.nacore: BigInt.from(10).pow(9),
     XCBUnit.mcore: BigInt.from(10).pow(12),
     XCBUnit.micore: BigInt.from(10).pow(15),
-    XCBUnit.core: BigInt.from(10).pow(18)
+    XCBUnit.core: BigInt.from(10).pow(18),
   };
 
   final BigInt _value;
@@ -89,6 +89,6 @@ class XCBAmount {
   int get hashCode => getInOre.hashCode;
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is XCBAmount && other.getInOre == getInOre;
 }

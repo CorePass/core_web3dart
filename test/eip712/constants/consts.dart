@@ -192,44 +192,17 @@ final Map<String, dynamic> TEST_TYPED_DATA_2_WITHOUT_EIP = {
 final SANITIZED_TYPED_DATA = {
   "types": {
     "EIP712Domain": [
-      {
-        "name": "name",
-        "type": "string",
-      },
-      {
-        "name": "version",
-        "type": "string",
-      },
-      {
-        "name": "chainId",
-        "type": "uint256",
-      },
-      {
-        "name": "verifyingContract",
-        "type": "address",
-      },
+      {"name": "name", "type": "string"},
+      {"name": "version", "type": "string"},
+      {"name": "chainId", "type": "uint256"},
+      {"name": "verifyingContract", "type": "address"},
     ],
     "Bounty": [
-      {
-        "name": "target",
-        "type": "address",
-      },
-      {
-        "name": "data",
-        "type": "bytes",
-      },
-      {
-        "name": "reward",
-        "type": "uint256",
-      },
-      {
-        "name": "nonce",
-        "type": "uint256",
-      },
-      {
-        "name": "deadline",
-        "type": "uint256",
-      },
+      {"name": "target", "type": "address"},
+      {"name": "data", "type": "bytes"},
+      {"name": "reward", "type": "uint256"},
+      {"name": "nonce", "type": "uint256"},
+      {"name": "deadline", "type": "uint256"},
     ],
   },
   "primaryType": "Bounty",
@@ -251,26 +224,11 @@ final SANITIZED_TYPED_DATA_WITHOUT_EIP = {
   "types": {
     "EIP712Domain": [],
     "Bounty": [
-      {
-        "name": "target",
-        "type": "address",
-      },
-      {
-        "name": "data",
-        "type": "bytes",
-      },
-      {
-        "name": "reward",
-        "type": "uint256",
-      },
-      {
-        "name": "nonce",
-        "type": "uint256",
-      },
-      {
-        "name": "deadline",
-        "type": "uint256",
-      },
+      {"name": "target", "type": "address"},
+      {"name": "data", "type": "bytes"},
+      {"name": "reward", "type": "uint256"},
+      {"name": "nonce", "type": "uint256"},
+      {"name": "deadline", "type": "uint256"},
     ],
   },
   "primaryType": "Bounty",
@@ -294,69 +252,48 @@ final SANITIZED_TYPED_DATA2 = {
       {'name': 'name', 'type': 'string'},
       {'name': 'version', 'type': 'string'},
       {'name': 'networkID', 'type': 'uint256'},
-      {'name': 'verifyingContract', 'type': 'address'}
+      {'name': 'verifyingContract', 'type': 'address'},
     ],
     'Mail': [
-      {'name': 'from', 'type': 'Person'}
+      {'name': 'from', 'type': 'Person'},
     ],
     'Person': [
       {'name': 'name', 'type': 'string'},
-      {'name': 'wallets', 'type': 'address[]'}
-    ]
+      {'name': 'wallets', 'type': 'address[]'},
+    ],
   },
   'primaryType': 'Mail',
   'domain': {
     'networkID': 1,
     'name': 'Core Mail',
     'verifyingContract': 'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
-    'version': '1'
+    'version': '1',
   },
   'message': {
     'from': {
       'name': 'Cow',
       'wallets': [
         'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
-        'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d'
-      ]
-    }
-  }
+        'cb803974bc8ad2da14aa41e4e716d7b350a3be02a08d',
+      ],
+    },
+  },
 };
 final SANITIZED_TYPED_DATA2_WITHOUT_EIP = {
   "types": {
     "EIP712Domain": [],
     "Group": [
-      {
-        "name": "name",
-        "type": "string",
-      },
-      {
-        "name": "members",
-        "type": "Person[]",
-      },
+      {"name": "name", "type": "string"},
+      {"name": "members", "type": "Person[]"},
     ],
     "Mail": [
-      {
-        "name": "from",
-        "type": "Person",
-      },
-      {
-        "name": "to",
-        "type": "Person[]",
-      },
-      {
-        "name": "contents",
-        "type": "string",
-      },
+      {"name": "from", "type": "Person"},
+      {"name": "to", "type": "Person[]"},
+      {"name": "contents", "type": "string"},
     ],
     "Person": [
-      {
-        "name": "name",
-        "type": "string",
-      },
-      {
-        "name": "wallets",
-        "type": "address[]",
-      },
+      {"name": "name", "type": "string"},
+      {"name": "wallets", "type": "address[]"},
     ],
   },
   "primaryType": "Mail",
@@ -455,7 +392,7 @@ final TEST_TYPED_DATA_4 = {
       {"name": 'name', "type": 'string'},
       {"name": 'version', "type": 'string'},
       {"name": 'chainId', "type": 'uint256'},
-      {"name": 'verifyingContract', "type": 'address'}
+      {"name": 'verifyingContract', "type": 'address'},
     ],
     "Cheque": [
       {"name": "spender", "type": "address"},
@@ -491,8 +428,5 @@ final Map<String, dynamic> TEST_TYPED_DATA_GO_CORE = {
       {"name": "age", "type": "uint8"},
     ],
   },
-  "message": {
-    "name": "test2",
-    "age": 18,
-  },
+  "message": {"name": "test2", "age": 18},
 };

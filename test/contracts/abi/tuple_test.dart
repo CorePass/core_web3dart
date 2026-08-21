@@ -28,10 +28,7 @@ const dynamicEncoded =
     '0000000000000000000000000000000000000000000000000000000000000002'
     '0000000000000000000000000000000000000000000000000000000000000003';
 
-const staticTuple = TupleType([
-  UintType(length: 32),
-  BoolType(),
-]);
+const staticTuple = TupleType([UintType(length: 32), BoolType()]);
 
 final staticData = [BigInt.from(0x45), true];
 
@@ -57,8 +54,12 @@ void main() {
 
   test('decodes values', () {
     expect(
-        staticTuple.decode(bufferFromHex(staticEncoded), 0).data, staticData);
-    expect(dynamicTuple.decode(bufferFromHex(dynamicEncoded), 0).data,
-        dynamicData);
+      staticTuple.decode(bufferFromHex(staticEncoded), 0).data,
+      staticData,
+    );
+    expect(
+      dynamicTuple.decode(bufferFromHex(dynamicEncoded), 0).data,
+      dynamicData,
+    );
   });
 }

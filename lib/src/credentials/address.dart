@@ -6,49 +6,238 @@ import 'package:core_web3dart/crypto.dart';
 
 final _precompiledContracts = [
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      4,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      7,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      8,
+    ]),
   ),
   bytesToHex(
-    Uint8List.fromList(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
-    ),
+    Uint8List.fromList([
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      9,
+    ]),
   ),
 ];
 
@@ -56,8 +245,10 @@ final _precompiledContracts = [
 @immutable
 class XCBAddress {
   static final xcbAddrLength = 44;
-  static final RegExp basicAddress =
-      RegExp(r'((cb)|(ce)|(ab))[0-9a-f]{42}', caseSensitive: false);
+  static final RegExp basicAddress = RegExp(
+    r'((cb)|(ce)|(ab))[0-9a-f]{42}',
+    caseSensitive: false,
+  );
 
   /// The length of an ethereum address, in bytes.
   static const addressByteLength = 22;
@@ -78,12 +269,13 @@ class XCBAddress {
   /// and can optionally be prefixed with "0x".
   ///
 
-  factory XCBAddress.fromHex(
-    String hex,
-  ) {
+  factory XCBAddress.fromHex(String hex) {
     if (!basicAddress.hasMatch(hex)) {
-      throw ArgumentError.value(hex, 'address',
-          'Must be a hex string with a length of $xcbAddrLength');
+      throw ArgumentError.value(
+        hex,
+        'address',
+        'Must be a hex string with a length of $xcbAddrLength',
+      );
     }
 
     if (hex.toUpperCase() == hex || hex.toLowerCase() == hex) {
@@ -100,7 +292,9 @@ class XCBAddress {
 
     if (bytesToHex(addressBytes.sublist(1, 2)) !=
         calculateCheckSum(
-            addressBytes.sublist(2), addressBytes.sublist(0, 1))) {
+          addressBytes.sublist(2),
+          addressBytes.sublist(0, 1),
+        )) {
       return false;
     }
 

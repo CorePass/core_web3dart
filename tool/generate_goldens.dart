@@ -13,19 +13,13 @@ Future<void> main() async {
     if (file is File && file.path.endsWith('.abi.json')) {
       // Generate golden data
       final content = await file.readAsString();
-      final sourceId = AssetId('a', 'lib/contract.abi.json');
+      final result = await testBuilder(const ContractGenerator(), {
+        'a|lib/contract.abi.json': content,
+      }, flattenOutput: true);
 
-      final reader = InMemoryAssetReader(sourceAssets: {sourceId: content});
-      final writer = InMemoryAssetWriter();
-      await runBuilder(
-        const ContractGenerator(),
-        [sourceId],
-        reader,
-        writer,
-        const _StubResolvers(),
+      final output = result.readerWriter.testing.readBytes(
+        AssetId('a', 'lib/contract.g.dart'),
       );
-
-      final output = writer.assets[AssetId('a', 'lib/contract.g.dart')]!;
       data[content] = utf8.decode(output);
     }
   }
@@ -44,13 +38,4 @@ Future<void> main() async {
   });
   resultBuilder.writeln('};');
   await output.writeAsString(resultBuilder.toString());
-}
-
-class _StubResolvers extends Resolvers {
-  const _StubResolvers();
-
-  @override
-  Future<ReleasableResolver> get(BuildStep step) {
-    throw UnsupportedError('stub');
-  }
 }

@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 
 import '../../crypto.dart';
 import '../../web3dart.dart';
-import 'deployed_contract.dart';
 
 /// Base classes for generated contracts.
 ///
@@ -25,9 +24,16 @@ abstract class GeneratedContract {
 
   @protected
   Future<List<dynamic>> read(
-      ContractFunction function, List<dynamic> params, BlockNum? atBlock) {
+    ContractFunction function,
+    List<dynamic> params,
+    BlockNum? atBlock,
+  ) {
     return client.call(
-        contract: self, function: function, params: params, atBlock: atBlock);
+      contract: self,
+      function: function,
+      params: params,
+      atBlock: atBlock,
+    );
   }
 
   @protected
@@ -37,12 +43,16 @@ abstract class GeneratedContract {
     ContractFunction function,
     List<dynamic> parameters,
   ) {
-    final transaction = base?.copyWith(
+    final transaction =
+        base?.copyWith(
           data: function.encodeCall(parameters),
           to: self.address,
         ) ??
         Transaction.callContract(
-            contract: self, function: function, parameters: parameters);
+          contract: self,
+          function: function,
+          parameters: parameters,
+        );
 
     return client.sendTransaction(
       credentials,

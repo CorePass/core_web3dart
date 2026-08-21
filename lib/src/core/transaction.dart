@@ -60,19 +60,20 @@ class Transaction {
     this.energyPrice,
     this.value,
     this.nonce,
-  })  : to = contract.address,
-        data = function.encodeCall(parameters);
+  }) : to = contract.address,
+       data = function.encodeCall(parameters);
 
-  Transaction copyWith(
-      {XCBAddress? from,
-      XCBAddress? to,
-      int? maxEnergy,
-      XCBAmount? energyPrice,
-      XCBAmount? value,
-      Uint8List? data,
-      int? nonce,
-      XCBAmount? maxPriorityFeePerEnergy,
-      XCBAmount? maxFeePerEnergy}) {
+  Transaction copyWith({
+    XCBAddress? from,
+    XCBAddress? to,
+    int? maxEnergy,
+    XCBAmount? energyPrice,
+    XCBAmount? value,
+    Uint8List? data,
+    int? nonce,
+    XCBAmount? maxPriorityFeePerEnergy,
+    XCBAmount? maxFeePerEnergy,
+  }) {
     return Transaction(
       from: from ?? this.from,
       to: to ?? this.to,

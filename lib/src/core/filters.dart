@@ -67,15 +67,15 @@ class _PendingTransactionsFilter extends _Filter<String> {
 class FilterOptions {
   FilterOptions({this.fromBlock, this.toBlock, this.address, this.topics});
 
-  FilterOptions.events(
-      {required DeployedContract contract,
-      required ContractEvent event,
-      this.fromBlock,
-      this.toBlock})
-      : address = contract.address,
-        topics = [
-          [bytesToHex(event.signature, padToEvenLength: true, include0x: true)]
-        ];
+  FilterOptions.events({
+    required DeployedContract contract,
+    required ContractEvent event,
+    this.fromBlock,
+    this.toBlock,
+  }) : address = contract.address,
+       topics = [
+         [bytesToHex(event.signature, padToEvenLength: true, include0x: true)],
+       ];
 
   /// The earliest block which should be considered for this filter. Optional,
   /// the default value is [BlockNum.current].
@@ -121,36 +121,40 @@ class FilterOptions {
 
 /// A log event emitted in a transaction.
 class FilterEvent {
-  FilterEvent(
-      {this.removed,
-      this.logIndex,
-      this.transactionIndex,
-      this.transactionHash,
-      this.blockHash,
-      this.blockNum,
-      this.address,
-      this.data,
-      this.topics});
+  FilterEvent({
+    this.removed,
+    this.logIndex,
+    this.transactionIndex,
+    this.transactionHash,
+    this.blockHash,
+    this.blockNum,
+    this.address,
+    this.data,
+    this.topics,
+  });
 
   FilterEvent.fromMap(Map<String, dynamic> log)
-      : removed = log['removed'] as bool? ?? false,
-        logIndex = log['logIndex'] != null
-            ? hexToInt(log['logIndex'] as String).toInt()
-            : null,
-        transactionIndex = log['transactionIndex'] != null
-            ? hexToInt(log['transactionIndex'] as String).toInt()
-            : null,
-        transactionHash = log['transactionHash'] != null
-            ? log['transactionHash'] as String
-            : null,
-        blockHash =
-            log['blockHash'] != null ? log['blockHash'] as String : null,
-        blockNum = log['blockNumber'] != null
-            ? hexToInt(log['blockNumber'] as String).toInt()
-            : null,
-        address = XCBAddress.fromHex(log['address'] as String),
-        data = log['data'] as String?,
-        topics = (log['topics'] as List?)?.cast<String>();
+    : removed = log['removed'] as bool? ?? false,
+      logIndex =
+          log['logIndex'] != null
+              ? hexToInt(log['logIndex'] as String).toInt()
+              : null,
+      transactionIndex =
+          log['transactionIndex'] != null
+              ? hexToInt(log['transactionIndex'] as String).toInt()
+              : null,
+      transactionHash =
+          log['transactionHash'] != null
+              ? log['transactionHash'] as String
+              : null,
+      blockHash = log['blockHash'] != null ? log['blockHash'] as String : null,
+      blockNum =
+          log['blockNumber'] != null
+              ? hexToInt(log['blockNumber'] as String).toInt()
+              : null,
+      address = XCBAddress.fromHex(log['address'] as String),
+      data = log['data'] as String?,
+      topics = (log['topics'] as List?)?.cast<String>();
 
   /// Whether the log was removed, due to a chain reorganization. False if it's
   /// a valid log.
@@ -245,10 +249,7 @@ class _EventFilter extends _Filter<FilterEvent> {
 
   @override
   _PubSubCreationParams createPubSub() {
-    return _PubSubCreationParams([
-      'logs',
-      _createParamsObject(false),
-    ]);
+    return _PubSubCreationParams(['logs', _createParamsObject(false)]);
   }
 
   dynamic _createParamsObject(bool includeFromAndTo) {
@@ -298,9 +299,12 @@ class _FilterEngine {
 
     late _InstantiatedFilter<T> instantiated;
     instantiated = _InstantiatedFilter(
-        filter, filter.supportsPubSub && pubSubAvailable, () {
-      _pendingUnsubcriptions.add(uninstall(instantiated));
-    });
+      filter,
+      filter.supportsPubSub && pubSubAvailable,
+      () {
+        _pendingUnsubcriptions.add(uninstall(instantiated));
+      },
+    );
 
     instantiated._controller.onListen = () {
       _filters.add(instantiated);
@@ -330,7 +334,9 @@ class _FilterEngine {
   }
 
   Future<void> _registerToPubSub(
-      _InstantiatedFilter filter, _PubSubCreationParams params) async {
+    _InstantiatedFilter filter,
+    _PubSubCreationParams params,
+  ) async {
     final peer = _client._connectWithPeer();
 
     try {
@@ -355,8 +361,9 @@ class _FilterEngine {
       final filterSnapshot = List.of(_filters);
 
       for (final filter in filterSnapshot) {
-        final updatedData =
-            await _rpc.call('xcb_getFilterChanges', [filter.id]);
+        final updatedData = await _rpc.call('xcb_getFilterChanges', [
+          filter.id,
+        ]);
 
         for (final payload in updatedData.result) {
           if (!filter._controller.isClosed) {
@@ -429,5 +436,5 @@ class _InstantiatedFilter<T> {
   final StreamController<T> _controller;
 
   _InstantiatedFilter(this.filter, this.isPubSub, Function() onCancel)
-      : _controller = StreamController(onCancel: onCancel);
+    : _controller = StreamController(onCancel: onCancel);
 }

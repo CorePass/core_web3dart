@@ -1,10 +1,11 @@
 part of 'package:core_web3dart/web3dart.dart';
 
 class _SigningInput {
-  _SigningInput(
-      {required this.transaction,
-      required this.credentials,
-      required this.networkId});
+  _SigningInput({
+    required this.transaction,
+    required this.credentials,
+    required this.networkId,
+  });
 
   final Transaction transaction;
   final Credentials credentials;
@@ -29,11 +30,15 @@ Future<_SigningInput> _fillMissingData({
 
   energyPrice ??= await client!.getEnergyPrice();
 
-  final nonce = transaction.nonce ??
-      await client!
-          .getTransactionCount(sender, atBlock: const BlockNum.pending());
+  final nonce =
+      transaction.nonce ??
+      await client!.getTransactionCount(
+        sender,
+        atBlock: const BlockNum.pending(),
+      );
 
-  final maxEnergy = transaction.maxEnergy ??
+  final maxEnergy =
+      transaction.maxEnergy ??
       await client!
           .estimateEnergy(
             sender: sender,
@@ -65,7 +70,10 @@ Future<_SigningInput> _fillMissingData({
 }
 
 Uint8List _signTransaction(
-    Transaction transaction, Credentials c, BigInt networkId) {
+  Transaction transaction,
+  Credentials c,
+  BigInt networkId,
+) {
   final _enRlp = _encodeRawToRlp(transaction, networkId);
 
   final _enLp = rlp.encode(_enRlp);
@@ -79,12 +87,15 @@ Uint8List _signTransaction(
 }
 
 List<dynamic> _encodeToRlp(
-    Transaction transaction, Uint8List signature, BigInt networkId) {
+  Transaction transaction,
+  Uint8List signature,
+  BigInt networkId,
+) {
   final list = [
     transaction.nonce ?? 0,
     transaction.energyPrice?.getInOre ?? 0,
     transaction.maxEnergy ?? 0,
-    networkId
+    networkId,
   ];
 
   if (transaction.to != null) {

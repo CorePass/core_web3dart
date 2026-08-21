@@ -29,22 +29,16 @@ void main() {
   ];
 
   invalidAddresses.forEach((String invalidAddr) {
-    test(
-      'invalid addresses validation',
-      () {
-        final address = XCBAddress.fromHex(invalidAddr);
-        expect(address.isValidAddress(), false);
-      },
-    );
+    test('invalid addresses validation', () {
+      final address = XCBAddress.fromHex(invalidAddr);
+      expect(address.isValidAddress(), false);
+    });
   });
 
   validAddresses.forEach((String validAddr) {
-    test(
-      'valid addresses validation',
-      () {
-        final address = XCBAddress(hexToBytes(validAddr));
-        expect(address.isValidAddress(), true);
-      },
-    );
+    test('valid addresses validation', () {
+      final address = XCBAddress(hexToBytes(validAddr));
+      expect(address.isValidAddress(), true);
+    });
   });
 }

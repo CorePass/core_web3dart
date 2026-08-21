@@ -14,7 +14,7 @@ class _SolcBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions {
     return const {
-      '.sol': ['.abi.json']
+      '.sol': ['.abi.json'],
     };
   }
 
@@ -23,23 +23,19 @@ class _SolcBuilder implements Builder {
     final inputId = buildStep.inputId;
 
     final contractSource = await buildStep.readAsString(inputId);
-    final response = await _solc(
-      {
-        'language': 'Solidity',
-        'sources': {
-          'contract': {
-            'content': contractSource,
-          }
-        },
-        'settings': {
-          'outputSelection': {
-            '*': {
-              '*': ['metadata']
-            }
+    final response = await _solc({
+      'language': 'Solidity',
+      'sources': {
+        'contract': {'content': contractSource},
+      },
+      'settings': {
+        'outputSelection': {
+          '*': {
+            '*': ['metadata'],
           },
         },
       },
-    );
+    });
 
     final contracts =
         ((response as Map)['contracts'] as Map)['contract'] as Map;

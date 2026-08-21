@@ -24,10 +24,11 @@ void _runTests(String content) {
     group('ABI - $testCase', () {
       final testVector = parsed[testCase] as Map<String, dynamic>;
 
-      final types = (testVector['types'] as List)
-          .cast<String>()
-          .map(parseAbiType)
-          .toList();
+      final types =
+          (testVector['types'] as List)
+              .cast<String>()
+              .map(parseAbiType)
+              .toList();
       final tupleWrapper = TupleType(types);
       final result = testVector['result'] as String;
       final input = _mapFromTest(testVector['args']);

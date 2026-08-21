@@ -22,7 +22,9 @@ import 'src/utils/rlp.dart' as rlp;
 import 'src/utils/typed_data.dart';
 
 export 'contracts.dart';
+export 'cip.dart';
 export 'credentials.dart';
+export 'ipfs.dart';
 
 export 'src/core/amount.dart';
 export 'src/core/block_information.dart';
@@ -31,6 +33,7 @@ export 'src/core/sync_information.dart';
 export 'src/eip712/core/eip712.dart';
 
 part 'src/core/client.dart';
+part 'src/core/custom_units.dart';
 part 'src/core/filters.dart';
 part 'src/core/transaction.dart';
 part 'src/core/transaction_information.dart';

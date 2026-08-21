@@ -3,17 +3,12 @@ import 'dart:typed_data';
 
 import 'package:core_web3dart/crypto.dart';
 
-import '../../crypto/formatting.dart';
 import '../../utils/length_tracking_byte_sink.dart';
 import 'arrays.dart';
 import 'tuple.dart';
 import 'types.dart';
 
-enum ContractFunctionType {
-  function,
-  constructor,
-  fallback,
-}
+enum ContractFunctionType { function, constructor, fallback }
 
 const Map<String, ContractFunctionType> _functionTypeNames = {
   'function': ContractFunctionType.function,
@@ -83,8 +78,9 @@ class ContractAbi {
         final components = <EventComponent>[];
 
         for (final entry in element['inputs']) {
-          components.add(EventComponent(
-              _parseParam(entry as Map), entry['indexed'] as bool));
+          components.add(
+            EventComponent(_parseParam(entry as Map), entry['indexed'] as bool),
+          );
         }
 
         events.add(ContractEvent(anonymous, name, components));
@@ -98,13 +94,15 @@ class ContractAbi {
       final inputs = _parseParams(element['inputs'] as List?);
       final outputs = _parseParams(element['outputs'] as List?);
 
-      functions.add(ContractFunction(
-        name,
-        inputs,
-        outputs: outputs,
-        type: parsedType,
-        mutability: mutability ?? StateMutability.nonPayable,
-      ));
+      functions.add(
+        ContractFunction(
+          name,
+          inputs,
+          outputs: outputs,
+          type: parsedType,
+          mutability: mutability ?? StateMutability.nonPayable,
+        ),
+      );
     }
 
     return ContractAbi(name, functions, events);
@@ -135,11 +133,16 @@ class ContractAbi {
   }
 
   static CompositeFunctionParameter _parseTuple(
-      String name, String typeName, List<FunctionParameter> components) {
+    String name,
+    String typeName,
+    List<FunctionParameter> components,
+  ) {
     // The type will have the form tuple[3][]...[1], where the indices after the
     // tuple indicate that the type is part of an array.
-    assert(RegExp(r'^tuple(?:\[\d*\])*$').hasMatch(typeName),
-        '$typeName is an invalid tuple type');
+    assert(
+      RegExp(r'^tuple(?:\[\d*\])*$').hasMatch(typeName),
+      '$typeName is an invalid tuple type',
+    );
 
     final arrayLengths = <int?>[];
     var remainingName = typeName;
@@ -231,15 +234,20 @@ class ContractFunction {
   Uint8List encodeCall(List<dynamic> params) {
     if (params.length != parameters.length) {
       throw ArgumentError.value(
-          params.length, 'params', 'Must match function parameters');
+        params.length,
+        'params',
+        'Must match function parameters',
+      );
     }
 
-    final sink = LengthTrackingByteSink()
-      //First four bytes to identify the function with its parameters
-      ..add(selector);
+    final sink =
+        LengthTrackingByteSink()
+          //First four bytes to identify the function with its parameters
+          ..add(selector);
 
-    TupleType(parameters.map((param) => param.type).toList())
-        .encode(params, sink);
+    TupleType(
+      parameters.map((param) => param.type).toList(),
+    ).encode(params, sink);
 
     return sink.asBytes();
   }
@@ -312,10 +320,11 @@ class ContractEvent {
     final topicOffset = anonymous ? 0 : 1;
 
     // non-indexed parameters are decoded like a tuple
-    final notIndexed = components
-        .where((c) => !c.indexed)
-        .map((c) => c.parameter.type)
-        .toList();
+    final notIndexed =
+        components
+            .where((c) => !c.indexed)
+            .map((c) => c.parameter.type)
+            .toList();
     final tuple = TupleType(notIndexed);
 
     final decodedNotIndexed = tuple.decode(hexToBytes(data).buffer, 0).data;
@@ -398,10 +407,12 @@ class CompositeFunctionParameter extends FunctionParameter<dynamic> {
   final List<int?> arrayLengths;
 
   CompositeFunctionParameter(String name, this.components, this.arrayLengths)
-      : super(name, _constructType(components, arrayLengths));
+    : super(name, _constructType(components, arrayLengths));
 
   static AbiType<dynamic> _constructType(
-      List<FunctionParameter> components, List<int?> arrayLengths) {
+    List<FunctionParameter> components,
+    List<int?> arrayLengths,
+  ) {
     AbiType type = TupleType(components.map((c) => c.type).toList());
 
     for (final len in arrayLengths) {

@@ -6,9 +6,12 @@ import '../../web3dart.dart';
 const package = 'package:core_web3dart/web3dart.dart';
 
 TypeReference referType(String name, [String? uri]) {
-  return TypeReference((b) => b
-    ..symbol = name
-    ..url = uri);
+  return TypeReference(
+    (b) =>
+        b
+          ..symbol = name
+          ..url = uri,
+  );
 }
 
 final dartInt = referType('int', 'dart:core');
@@ -39,30 +42,45 @@ final mutabilities = {
 };
 
 final functionTypes = {
-  ContractFunctionType.function:
-      refer('ContractFunctionType.function', package),
-  ContractFunctionType.fallback:
-      refer('ContractFunctionType.fallback', package),
-  ContractFunctionType.constructor:
-      refer('ContractFunctionType.constructor', package),
+  ContractFunctionType.function: refer(
+    'ContractFunctionType.function',
+    package,
+  ),
+  ContractFunctionType.fallback: refer(
+    'ContractFunctionType.fallback',
+    package,
+  ),
+  ContractFunctionType.constructor: refer(
+    'ContractFunctionType.constructor',
+    package,
+  ),
 };
 
 Reference futurize(Reference r) {
-  return TypeReference((b) => b
-    ..symbol = 'Future'
-    ..types.add(r));
+  return TypeReference(
+    (b) =>
+        b
+          ..symbol = 'Future'
+          ..types.add(r),
+  );
 }
 
 Reference streamOf(Reference r) {
-  return TypeReference((b) => b
-    ..symbol = 'Stream'
-    ..types.add(r));
+  return TypeReference(
+    (b) =>
+        b
+          ..symbol = 'Stream'
+          ..types.add(r),
+  );
 }
 
 TypeReference listify(Reference r) {
-  return TypeReference((b) => b
-    ..symbol = 'List'
-    ..types.add(r));
+  return TypeReference(
+    (b) =>
+        b
+          ..symbol = 'List'
+          ..types.add(r),
+  );
 }
 
 Expression callSuper(List<Expression> args) {

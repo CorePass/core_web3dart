@@ -7,18 +7,15 @@ final abiTypes = <String, AbiType>{
   'bool': const BoolType(),
   'bytes16[]': const DynamicLengthArray(type: FixedBytes(16)),
   'bytes[16]': const FixedLengthArray(type: DynamicBytes(), length: 16),
-  '(bool,uint8,string)':
-      const TupleType([BoolType(), UintType(length: 8), StringType()]),
+  '(bool,uint8,string)': const TupleType([
+    BoolType(),
+    UintType(length: 8),
+    StringType(),
+  ]),
   '(uint256,(bool,bytes8)[6])[]': const DynamicLengthArray(
     type: TupleType([
       UintType(),
-      FixedLengthArray(
-        type: TupleType([
-          BoolType(),
-          FixedBytes(8),
-        ]),
-        length: 6,
-      ),
+      FixedLengthArray(type: TupleType([BoolType(), FixedBytes(8)]), length: 6),
     ]),
   ),
 };
@@ -28,7 +25,7 @@ final invalidTypes = [
   'bööl',
   '(uint,string',
   'uint19',
-  'int32[three]'
+  'int32[three]',
 ];
 
 void main() {

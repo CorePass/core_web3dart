@@ -12,8 +12,12 @@ class MockClient extends BaseClient {
   MockClient(this.handler);
 
   @override
-  Future<Response> post(Uri url,
-      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+  Future<Response> post(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) async {
     if (body is! String) {
       fail('Invalid request, expected string as request body');
     }
@@ -29,7 +33,7 @@ class MockClient extends BaseClient {
     final response = {
       'body': body,
       'id': id,
-      'result': handler(method, params)
+      'result': handler(method, params),
     };
 
     return Response(json.encode(response), 200);
@@ -55,18 +59,13 @@ class MockClient extends BaseClient {
 
     return StreamedResponse(
       _jsonUtf8.encoder.bind(
-        Stream.value(
-          {
-            'jsonrpc': '2.0',
-            if (response is ValueResult) 'result': response.value,
-            if (response is ErrorResult)
-              'error': {
-                'code': -1,
-                'message': '${response.error}',
-              },
-            'id': id,
-          },
-        ),
+        Stream.value({
+          'jsonrpc': '2.0',
+          if (response is ValueResult) 'result': response.value,
+          if (response is ErrorResult)
+            'error': {'code': -1, 'message': '${response.error}'},
+          'id': id,
+        }),
       ),
       200,
     );

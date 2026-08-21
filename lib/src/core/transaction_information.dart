@@ -2,23 +2,24 @@ part of 'package:core_web3dart/web3dart.dart';
 
 class TransactionInformation {
   TransactionInformation.fromMap(Map<String, dynamic> map)
-      : blockHash = map['blockHash'],
-        blockNumber = map['blockNumber'] != null
-            ? BlockNum.exact(int.parse(map['blockNumber'] as String))
-            : const BlockNum.pending(),
-        from = XCBAddress.fromHex(map['from'] as String),
-        energy = int.parse(map['energy'] as String),
-        energyPrice =
-            XCBAmount.inOre(BigInt.parse(map['energyPrice'] as String)),
-        hash = map['hash'] as String,
-        input = hexToBytes(map['input'] as String),
-        nonce = int.parse(map['nonce'] as String),
-        to = map['to'] != null ? XCBAddress.fromHex(map['to'] as String) : null,
-        transactionIndex = map['transactionIndex'] != null
-            ? int.parse(map['transactionIndex'] as String)
-            : null,
-        value = XCBAmount.inOre(BigInt.parse(map['value'] as String)),
-        signature = hexToBytes(strip0x(map['signature'] as String));
+    : blockHash = map['blockHash'],
+      blockNumber =
+          map['blockNumber'] != null
+              ? BlockNum.exact(int.parse(map['blockNumber'] as String))
+              : const BlockNum.pending(),
+      from = XCBAddress.fromHex(map['from'] as String),
+      energy = int.parse(map['energy'] as String),
+      energyPrice = XCBAmount.inOre(BigInt.parse(map['energyPrice'] as String)),
+      hash = map['hash'] as String,
+      input = hexToBytes(map['input'] as String),
+      nonce = int.parse(map['nonce'] as String),
+      to = map['to'] != null ? XCBAddress.fromHex(map['to'] as String) : null,
+      transactionIndex =
+          map['transactionIndex'] != null
+              ? int.parse(map['transactionIndex'] as String)
+              : null,
+      value = XCBAmount.inOre(BigInt.parse(map['value'] as String)),
+      signature = hexToBytes(strip0x(map['signature'] as String));
 
   /// The hash of the block containing this transaction. If this transaction has
   /// not been mined yet and is thus in no block, it will be `null`
@@ -63,50 +64,61 @@ class TransactionInformation {
 }
 
 class TransactionReceipt {
-  TransactionReceipt(
-      {required this.transactionHash,
-      required this.transactionIndex,
-      required this.blockHash,
-      required this.cumulativeEnergyUsed,
-      this.blockNumber = const BlockNum.pending(),
-      this.contractAddress,
-      this.status,
-      this.from,
-      this.to,
-      this.energyUsed,
-      this.effectiveEnergyPrice,
-      this.logs = const []});
+  TransactionReceipt({
+    required this.transactionHash,
+    required this.transactionIndex,
+    required this.blockHash,
+    required this.cumulativeEnergyUsed,
+    this.blockNumber = const BlockNum.pending(),
+    this.contractAddress,
+    this.status,
+    this.from,
+    this.to,
+    this.energyUsed,
+    this.effectiveEnergyPrice,
+    this.logs = const [],
+  });
 
   TransactionReceipt.fromMap(Map<String, dynamic> map)
-      : transactionHash = hexToBytes(map['transactionHash'] as String),
-        transactionIndex = hexToDartInt(map['transactionIndex'] as String),
-        blockHash = hexToBytes(map['blockHash'] as String),
-        blockNumber = map['blockNumber'] != null
-            ? BlockNum.exact(int.parse(map['blockNumber'] as String))
-            : const BlockNum.pending(),
-        from = map['from'] != null
-            ? XCBAddress.fromHex(map['from'] as String)
-            : null,
-        to = map['to'] != null ? XCBAddress.fromHex(map['to'] as String) : null,
-        cumulativeEnergyUsed = hexToInt(map['cumulativeEnergyUsed'] as String),
-        energyUsed = map['energyUsed'] != null
-            ? hexToInt(map['energyUsed'] as String)
-            : null,
-        effectiveEnergyPrice = map['effectiveEnergyPrice'] != null
-            ? XCBAmount.inOre(
-                BigInt.parse(map['effectiveEnergyPrice'] as String))
-            : null,
-        contractAddress = map['contractAddress'] != null
-            ? XCBAddress.fromHex(map['contractAddress'] as String)
-            : null,
-        status = map['status'] != null
-            ? (hexToDartInt(map['status'] as String) == 1)
-            : null,
-        logs = map['logs'] != null
-            ? (map['logs'] as List<dynamic>)
-                .map((log) => FilterEvent.fromMap(log as Map<String, dynamic>))
-                .toList()
-            : [];
+    : transactionHash = hexToBytes(map['transactionHash'] as String),
+      transactionIndex = hexToDartInt(map['transactionIndex'] as String),
+      blockHash = hexToBytes(map['blockHash'] as String),
+      blockNumber =
+          map['blockNumber'] != null
+              ? BlockNum.exact(int.parse(map['blockNumber'] as String))
+              : const BlockNum.pending(),
+      from =
+          map['from'] != null
+              ? XCBAddress.fromHex(map['from'] as String)
+              : null,
+      to = map['to'] != null ? XCBAddress.fromHex(map['to'] as String) : null,
+      cumulativeEnergyUsed = hexToInt(map['cumulativeEnergyUsed'] as String),
+      energyUsed =
+          map['energyUsed'] != null
+              ? hexToInt(map['energyUsed'] as String)
+              : null,
+      effectiveEnergyPrice =
+          map['effectiveEnergyPrice'] != null
+              ? XCBAmount.inOre(
+                BigInt.parse(map['effectiveEnergyPrice'] as String),
+              )
+              : null,
+      contractAddress =
+          map['contractAddress'] != null
+              ? XCBAddress.fromHex(map['contractAddress'] as String)
+              : null,
+      status =
+          map['status'] != null
+              ? (hexToDartInt(map['status'] as String) == 1)
+              : null,
+      logs =
+          map['logs'] != null
+              ? (map['logs'] as List<dynamic>)
+                  .map(
+                    (log) => FilterEvent.fromMap(log as Map<String, dynamic>),
+                  )
+                  .toList()
+              : [];
 
   /// Hash of the transaction (32 bytes).
   final Uint8List transactionHash;

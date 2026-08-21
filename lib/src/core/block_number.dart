@@ -12,20 +12,14 @@ class BlockNum {
   const BlockNum.exact(this.blockNum) : useAbsolute = true;
 
   /// Use the state of the blockchain with the first block
-  const BlockNum.genesis()
-      : useAbsolute = false,
-        blockNum = 0;
+  const BlockNum.genesis() : useAbsolute = false, blockNum = 0;
 
   /// Use the state of the blockchain as of the latest mined block.
-  const BlockNum.current()
-      : useAbsolute = false,
-        blockNum = 1;
+  const BlockNum.current() : useAbsolute = false, blockNum = 1;
 
   /// Use the current state of the blockchain, including pending transactions
   /// that have not yet been mined.
-  const BlockNum.pending()
-      : useAbsolute = false,
-        blockNum = 2;
+  const BlockNum.pending() : useAbsolute = false, blockNum = 2;
 
   /// Generates the block parameter as it is accepted by the Core client.
   String toBlockParam() {

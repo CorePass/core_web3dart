@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
@@ -12,16 +11,20 @@ class EIP712 {
 
   /// Get a signable message from the typed data, accepts `typedData` and `hash` and hash is used when you want the hashed result of the output (keccak hash which ethereum uses)
 
-  String getMessageForSign(
-      {required Map<String, dynamic> typedData,
-      bool hash = true,
-      bool include0x = true}) {
+  String getMessageForSign({
+    required Map<String, dynamic> typedData,
+    bool hash = true,
+    bool include0x = true,
+  }) {
     Uint8List _primaryTypeHash = Uint8List.fromList([]);
     // MARK: step1. sanitize data
     final sanitizedData = sanitizeData(typedData);
     // MARK: step2. get struct hash of typedData with type EIP712Domain
     final _eip712DomainHash = hashStruct(
-        'EIP712Domain', sanitizedData['domain'], sanitizedData['types']);
+      'EIP712Domain',
+      sanitizedData['domain'],
+      sanitizedData['types'],
+    );
     // MARK: step3. get struct hash of typedData with type primaryType
 
     if (sanitizedData['primaryType'] != 'EIP712Domain') {
@@ -32,8 +35,11 @@ class EIP712 {
       );
     }
     // MARK: step4. concat `EIP_191_PREFIX` and first and second step to get the message
-    final message = Uint8List.fromList(
-        [...EIP_191_PREFIX, ..._eip712DomainHash, ..._primaryTypeHash]);
+    final message = Uint8List.fromList([
+      ...EIP_191_PREFIX,
+      ..._eip712DomainHash,
+      ..._primaryTypeHash,
+    ]);
     if (hash) {
       final _res = HEX.encode(sha3_256(message));
       return include0x ? "0x$_res" : _res;
@@ -50,25 +56,34 @@ class EIP712 {
    * @returns {Map<String, dynamic>} - typed message Map<String, dynamic> with only allowed fields
    */
   Map<String, dynamic> sanitizeData(Map<String, dynamic> typedData) {
-    assert(typedData['types'] != null,
-        "the types property of the input typedData needs to be provided");
-    assert(typedData['primaryType'] != null,
-        "the primaryType property of the input typedData needs to be provided");
-    assert(typedData['domain'] != null,
-        "the domain property of the input typedData needs to be provided");
-    assert(typedData['message'] != null,
-        "the message property of the input typedData needs to be provided");
+    assert(
+      typedData['types'] != null,
+      "the types property of the input typedData needs to be provided",
+    );
+    assert(
+      typedData['primaryType'] != null,
+      "the primaryType property of the input typedData needs to be provided",
+    );
+    assert(
+      typedData['domain'] != null,
+      "the domain property of the input typedData needs to be provided",
+    );
+    assert(
+      typedData['message'] != null,
+      "the message property of the input typedData needs to be provided",
+    );
     Map<String, dynamic> _sanitizedData = {};
-    for (var key in (TYPED_MESSAGE_SCHEMA["properties"] as Map<String, dynamic>)
-        .keys
-        .toList()) {
+    for (var key
+        in (TYPED_MESSAGE_SCHEMA["properties"] as Map<String, dynamic>).keys
+            .toList()) {
       if (typedData[key] != null) {
         _sanitizedData[key] = typedData[key];
       }
     }
     if (_sanitizedData["types"]["EIP712Domain"] == null) {
-      _sanitizedData["types"]["EIP712Domain"] =
-          List<Map<String, String>>.from([]);
+      _sanitizedData["types"]["EIP712Domain"] = List<Map<String, String>>.from(
+        [],
+      );
     }
     return _sanitizedData;
   }
@@ -102,14 +117,21 @@ class EIP712 {
    * @param {Map<String,dynamic>} types - Type definitions
    * @returns {Uint8List} - Encoded representation of an Map<String,dynamic>
    */
-  String encodeData(String primaryType, Map<String, dynamic> data,
-      Map<String, dynamic> types) {
+  String encodeData(
+    String primaryType,
+    Map<String, dynamic> data,
+    Map<String, dynamic> types,
+  ) {
     List<String> encodedTypes = ['bytes32'];
     List<dynamic> encodedValues = List<dynamic>.from([]);
     encodedValues.add(hashType(primaryType, types));
     for (var field in types[primaryType]) {
-      final _enc =
-          encodeField(field["name"], field["type"], data[field["name"]], types);
+      final _enc = encodeField(
+        field["name"],
+        field["type"],
+        data[field["name"]],
+        types,
+      );
       encodedTypes.add(_enc[0]);
       encodedValues.add(_enc[1]);
     }
@@ -120,7 +142,11 @@ class EIP712 {
   }
 
   encodeField(
-      String name, String type, dynamic value, Map<String, dynamic> types) {
+    String name,
+    String type,
+    dynamic value,
+    Map<String, dynamic> types,
+  ) {
     if (types[type] != null) {
       dynamic _a =
           '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -133,7 +159,7 @@ class EIP712 {
       return [
         'bytes32',
         // eslint-disable-line no-eq-null
-        _a
+        _a,
       ];
     }
 
@@ -145,7 +171,7 @@ class EIP712 {
       if (value is String) {
         return [
           'bytes32',
-          sha3_256((Uint8List.fromList(HEX.decode(strip0x(value)))))
+          sha3_256((Uint8List.fromList(HEX.decode(strip0x(value))))),
         ];
       } else {
         throw Exception("not recognized type for $name with type $type");
@@ -160,16 +186,18 @@ class EIP712 {
 
     if (type.lastIndexOf(']') == type.length - 1) {
       final parsedType = type.substring(0, type.lastIndexOf('['));
-      final typeValuePairs =
-          value.map((item) => encodeField(name, parsedType, item, types));
+      final typeValuePairs = value.map(
+        (item) => encodeField(name, parsedType, item, types),
+      );
       return [
         'bytes32',
         sha3_256(
           (_abiHelper.rawEncode(
-              // MARK: 0 to get the types and 1 to get the values
-              typeValuePairs.map((t) => t[0]).toList(),
-              typeValuePairs.map((t) => t[1]).toList())),
-        )
+            // MARK: 0 to get the types and 1 to get the values
+            typeValuePairs.map((t) => t[0]).toList(),
+            typeValuePairs.map((t) => t[1]).toList(),
+          )),
+        ),
       ];
     }
 
@@ -178,7 +206,8 @@ class EIP712 {
 
   Uint8List hashType(String primaryType, Map<String, dynamic> types) {
     return sha3_256(
-        Uint8List.fromList(utf8.encode(encodeType(primaryType, types))));
+      Uint8List.fromList(utf8.encode(encodeType(primaryType, types))),
+    );
   }
 
   /**
@@ -191,9 +220,11 @@ class EIP712 {
   String encodeType(String primaryType, Map<String, dynamic> types) {
     String result = '';
     List<String> deps =
-        findTypeDependencies(primaryType, types, List<String>.from([]))
-            .where((dep) => dep != primaryType)
-            .toList();
+        findTypeDependencies(
+          primaryType,
+          types,
+          List<String>.from([]),
+        ).where((dep) => dep != primaryType).toList();
     deps.sort();
     deps = [primaryType, ...deps];
 
@@ -219,7 +250,10 @@ class EIP712 {
    * @returns {Array} - Set of all types found in the type definition
    */
   List<String> findTypeDependencies(
-      String primaryType, Map<String, dynamic> types, List<String> results) {
+    String primaryType,
+    Map<String, dynamic> types,
+    List<String> results,
+  ) {
     String _prType = primaryType;
     final _regex = RegExp('/^\w*/u');
     final _matches = _regex.allMatches(primaryType).toList();

@@ -51,21 +51,37 @@ abstract class Credentials {
 
 /// Credentials that can sign payloads with an Core Block Chain private key.
 class XCBPrivateKey extends Credentials {
-  final Uint8List privateKey;
+  final Uint8List _privateKey;
   XCBAddress? _cachedAddress;
 
-  XCBPrivateKey(this.privateKey);
+  XCBPrivateKey(Uint8List privateKey)
+    : _privateKey = _validateAndCopy(privateKey);
 
-  XCBPrivateKey.fromHex(String hex) : privateKey = hexToBytes(hex);
+  XCBPrivateKey.fromHex(String hex) : this(Uint8List.fromList(hexToBytes(hex)));
+
+  /// Returns a copy so callers cannot mutate the stored private key.
+  Uint8List get privateKey => Uint8List.fromList(_privateKey);
+
+  static Uint8List _validateAndCopy(Uint8List privateKey) {
+    if (privateKey.isEmpty) {
+      throw ArgumentError.value(
+        privateKey.length,
+        'privateKey',
+        'Must not be empty',
+      );
+    }
+    return Uint8List.fromList(privateKey);
+  }
 
   @override
   final bool isolateSafe = true;
 
   @override
   XCBAddress extractAddress(int networkId) {
-    var _pubKey = privateKeyBytesToPublic(privateKey);
-    return _cachedAddress ??=
-        XCBAddress(publicKeyToAddress(_pubKey, networkId));
+    final publicKey = privateKeyBytesToPublic(_privateKey);
+    return _cachedAddress ??= XCBAddress(
+      publicKeyToAddress(publicKey, networkId),
+    );
   }
 
   /// Creates a new, random private key from the [random] number generator.
@@ -80,7 +96,7 @@ class XCBPrivateKey extends Credentials {
   }
   @override
   Uint8List signToSignature(Uint8List payload, {required int networkId}) {
-    final signature = signWithPrivKey(sha3_256(payload), privateKey);
+    final signature = signWithPrivKey(sha3_256(payload), _privateKey);
     return signature;
   }
 
@@ -89,8 +105,8 @@ class XCBPrivateKey extends Credentials {
       identical(this, other) ||
       other is XCBPrivateKey &&
           runtimeType == other.runtimeType &&
-          const ListEquality().equals(privateKey, other.privateKey);
+          const ListEquality().equals(_privateKey, other._privateKey);
 
   @override
-  int get hashCode => privateKey.hashCode;
+  int get hashCode => Object.hashAll(_privateKey);
 }

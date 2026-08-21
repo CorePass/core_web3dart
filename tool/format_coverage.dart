@@ -4,17 +4,23 @@ import 'package:coverage/coverage.dart';
 
 Future<void> main() async {
   final dir = Directory('test_coverage');
-  final resolver = Resolver(packagesPath: '.packages');
+  final resolver = await Resolver.create(
+    packagePath: '.dart_tool/package_config.json',
+  );
 
-  final files = await dir
-      .list(recursive: true)
-      .where((entity) => entity is File)
-      .map((entity) => entity as File)
-      .toList();
+  final files =
+      await dir
+          .list(recursive: true)
+          .where((entity) => entity is File)
+          .map((entity) => entity as File)
+          .toList();
 
   final coverage = await HitMap.parseFiles(files);
 
-  final output =
-      coverage.formatLcov(resolver, reportOn: ['lib', 'test'], basePath: '.');
+  final output = coverage.formatLcov(
+    resolver,
+    reportOn: ['lib', 'test'],
+    basePath: '.',
+  );
   await File('lcov.info').writeAsString(output);
 }

@@ -20,8 +20,8 @@ abstract class _IntTypeBase extends AbiType<BigInt> {
   String get name => _namePrefix + length.toString();
 
   const _IntTypeBase(this.length)
-      : assert(length % 8 == 0),
-        assert(0 < length && length <= 256);
+    : assert(length % 8 == 0),
+      assert(0 < length && length <= 256);
 
   @internal
   void validate() {
@@ -34,8 +34,9 @@ abstract class _IntTypeBase extends AbiType<BigInt> {
   DecodingResult<BigInt> decode(ByteBuffer buffer, int offset) {
     // we're always going to read a 32-byte block for integers
     return DecodingResult(
-        _decode32Bytes(buffer.asUint8List(offset, sizeUnitBytes)),
-        sizeUnitBytes);
+      _decode32Bytes(buffer.asUint8List(offset, sizeUnitBytes)),
+      sizeUnitBytes,
+    );
   }
 
   BigInt _decode32Bytes(Uint8List data);
@@ -66,7 +67,10 @@ class UintType extends _IntTypeBase {
   }
 
   void encodeReplace(
-      int startIndex, BigInt data, LengthTrackingByteSink buffer) {
+    int startIndex,
+    BigInt data,
+    LengthTrackingByteSink buffer,
+  ) {
     final bytes = unsignedIntToBytes(data);
     final padLen = calculatePadLength(bytes.length);
 
@@ -114,8 +118,10 @@ class AddressType extends AbiType<XCBAddress> {
 
   @override
   DecodingResult<XCBAddress> decode(ByteBuffer buffer, int offset) {
-    final addressBytes =
-        buffer.asUint8List(offset + _paddingLen, XCBAddress.addressByteLength);
+    final addressBytes = buffer.asUint8List(
+      offset + _paddingLen,
+      XCBAddress.addressByteLength,
+    );
     return DecodingResult(XCBAddress(addressBytes), sizeUnitBytes);
   }
 
@@ -160,9 +166,7 @@ class BoolType extends AbiType<bool> {
   int get hashCode => runtimeType.hashCode;
 
   @override
-  bool operator ==(dynamic other) {
-    return other.runtimeType == BoolType;
-  }
+  bool operator ==(Object other) => other is BoolType;
 }
 
 /// The solidity int<M> types that encodes twos-complement integers.

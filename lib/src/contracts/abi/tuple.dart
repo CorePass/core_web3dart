@@ -77,7 +77,10 @@ class TupleType extends AbiType<List<dynamic>> {
 
       // replace the 32 zero-bytes with the actual encoded offset
       const UintType().encodeReplace(
-          dynamicHeaderPositions[i], BigInt.from(currentDynamicOffset), buffer);
+        dynamicHeaderPositions[i],
+        BigInt.from(currentDynamicOffset),
+        buffer,
+      );
 
       final lengthBefore = buffer.length;
       types[i].encode(data[i], buffer);
@@ -93,8 +96,10 @@ class TupleType extends AbiType<List<dynamic>> {
 
     for (final type in types) {
       if (type.encodingLength.isDynamic) {
-        final positionResult =
-            const UintType().decode(buffer, offset + headersLength);
+        final positionResult = const UintType().decode(
+          buffer,
+          offset + headersLength,
+        );
         headersLength += positionResult.bytesRead;
 
         final position = positionResult.data.toInt();

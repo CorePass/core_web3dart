@@ -74,8 +74,14 @@ void main() {
       networkId: networkId,
     );
 
-    expect((await client.getBalance(firstAddress)).getInOre, balanceOfFirst.getInOre - value);
-    expect((await client.getBalance(secondAddress)).getInOre, balanceOfSecond.getInOre + value);
+    expect(
+      (await client.getBalance(firstAddress)).getInOre,
+      balanceOfFirst.getInOre - value,
+    );
+    expect(
+      (await client.getBalance(secondAddress)).getInOre,
+      balanceOfSecond.getInOre + value,
+    );
 
     final receipt = await client.getTransactionReceipt(hash);
     expect(
@@ -86,42 +92,44 @@ void main() {
     );
   });
 
-  test(
-    'EIP-1559 transactions',
-    () async {
-      final firstAddress = await first.extractAddress(networkId);
-      final secondAddress = await second.extractAddress(networkId);
+  test('EIP-1559 transactions', () async {
+    final firstAddress = await first.extractAddress(networkId);
+    final secondAddress = await second.extractAddress(networkId);
 
-      final balanceOfFirst = await client.getBalance(firstAddress);
-      final balanceOfSecond = await client.getBalance(secondAddress);
-      final value = BigInt.from(1337);
+    final balanceOfFirst = await client.getBalance(firstAddress);
+    final balanceOfSecond = await client.getBalance(secondAddress);
+    final value = BigInt.from(1337);
 
-      final hash = await client.sendTransaction(
-        first,
-        Transaction(
-          to: secondAddress,
-          value: XCBAmount.inOre(value),
-        ),
-        networkId: networkId,
-      );
+    final hash = await client.sendTransaction(
+      first,
+      Transaction(to: secondAddress, value: XCBAmount.inOre(value)),
+      networkId: networkId,
+    );
 
-      expect((await client.getBalance(firstAddress)).getInOre, balanceOfFirst.getInOre - value);
-      expect((await client.getBalance(secondAddress)).getInOre, balanceOfSecond.getInOre + value);
+    expect(
+      (await client.getBalance(firstAddress)).getInOre,
+      balanceOfFirst.getInOre - value,
+    );
+    expect(
+      (await client.getBalance(secondAddress)).getInOre,
+      balanceOfSecond.getInOre + value,
+    );
 
-      final receipt = await client.getTransactionReceipt(hash);
-      expect(
-        receipt,
-        isA<TransactionReceipt>()
-            .having((e) => e.to, 'to', secondAddress)
-            .having((e) => e.from, 'from', firstAddress),
-      );
-    },
-  );
+    final receipt = await client.getTransactionReceipt(hash);
+    expect(
+      receipt,
+      isA<TransactionReceipt>()
+          .having((e) => e.to, 'to', secondAddress)
+          .having((e) => e.from, 'from', firstAddress),
+    );
+  });
 
   test('getTransactionReceipt returns null for unknown transactions', () {
     expect(
-        client.getTransactionReceipt(
-            '0x1234567812345678123456781234567812345678123456781234567812345678'),
-        completion(isNull));
+      client.getTransactionReceipt(
+        '0x1234567812345678123456781234567812345678123456781234567812345678',
+      ),
+      completion(isNull),
+    );
   });
 }

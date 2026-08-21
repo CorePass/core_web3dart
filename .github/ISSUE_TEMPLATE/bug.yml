@@ -1,0 +1,71 @@
+name: Report Bug
+description: Report a reproducible problem in Core Web3Dart
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a problem. Do not include private keys, wallet passwords, seed phrases, or production credentials.
+
+  - type: input
+    id: package_version
+    attributes:
+      label: Package version
+      description: Version of core_web3dart where the problem occurs.
+      placeholder: 2.5.0
+    validations:
+      required: true
+
+  - type: input
+    id: dart_version
+    attributes:
+      label: Dart or Flutter version
+      description: Paste the output of dart --version or flutter --version.
+      placeholder: Dart SDK version 3.x.x
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      description: Runtime and operating system where the problem occurs.
+      placeholder: Dart VM on macOS, Flutter on Android, or Web
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem description
+      description: Explain what happened and which API was involved.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest safe example that reproduces the problem.
+      placeholder: |
+        1. Create a Web3Client with ...
+        2. Call ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Describe what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or additional context
+      description: Add sanitized logs, stack traces, screenshots, or other relevant details.
+      render: shell

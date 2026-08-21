@@ -11,8 +11,10 @@ void main() {
   ]);
 
   test('creates signature', () {
-    expect(bytesToHex(event.signature),
-        'c17a9d92b89f27cb79cc390f23a1a5d302fefab8c7911075ede952ac2b5607a1');
+    expect(
+      bytesToHex(event.signature),
+      'c17a9d92b89f27cb79cc390f23a1a5d302fefab8c7911075ede952ac2b5607a1',
+    );
   });
 
   test('decodes return data', () {

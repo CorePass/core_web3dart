@@ -1,0 +1,51 @@
+name: Feature Request
+description: Suggest an improvement for Core Web3Dart
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve Core Web3Dart. Describe the use case and proposed public API as clearly as possible.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What problem would this feature solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior and API you would like to add.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Proposed Dart API
+      description: Show how application code should use this feature, if applicable.
+      render: dart
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe existing workarounds or alternative designs.
+
+  - type: input
+    id: platforms
+    attributes:
+      label: Target platforms
+      description: Which Dart or Flutter platforms need this feature?
+      placeholder: All platforms, Dart VM, Web, Android, or iOS
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add relevant standards, specifications, diagrams, or examples.

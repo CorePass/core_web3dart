@@ -33,8 +33,10 @@ class FixedBytes extends AbiType<Uint8List> {
 
   @override
   void encode(Uint8List data, LengthTrackingByteSink buffer) {
-    assert(data.length == length,
-        'Invalid length: Tried to encode ${data.length} bytes, but expected exactly $length');
+    assert(
+      data.length == length,
+      'Invalid length: Tried to encode ${data.length} bytes, but expected exactly $length',
+    );
     final paddingBytes = calculatePadLength(length);
 
     buffer
@@ -44,10 +46,7 @@ class FixedBytes extends AbiType<Uint8List> {
 
   @override
   DecodingResult<Uint8List> decode(ByteBuffer buffer, int offset) {
-    return DecodingResult(
-      buffer.asUint8List(offset, length),
-      sizeUnitBytes,
-    );
+    return DecodingResult(buffer.asUint8List(offset, length), sizeUnitBytes);
   }
 
   @override
@@ -170,7 +169,7 @@ class FixedLengthArray<T> extends BaseArrayType<T> {
   }
 
   const FixedLengthArray({required AbiType<T> type, required this.length})
-      : super._(type);
+    : super._(type);
 
   @override
   void encode(List<T> data, LengthTrackingByteSink buffer) {
@@ -187,8 +186,11 @@ class FixedLengthArray<T> extends BaseArrayType<T> {
 
       for (var i = 0; i < length; i++) {
         // write the actual position into the slot reserved earlier
-        lengthEncoder.encodeReplace(startPosition + i * sizeUnitBytes,
-            BigInt.from(currentOffset), buffer);
+        lengthEncoder.encodeReplace(
+          startPosition + i * sizeUnitBytes,
+          BigInt.from(currentOffset),
+          buffer,
+        );
 
         final lengthBefore = buffer.length;
         type.encode(data[i], buffer);
@@ -209,8 +211,10 @@ class FixedLengthArray<T> extends BaseArrayType<T> {
 
     if (encodingLength.isDynamic) {
       for (var i = 0; i < length; i++) {
-        final positionResult =
-            const UintType().decode(buffer, offset + headersLength);
+        final positionResult = const UintType().decode(
+          buffer,
+          offset + headersLength,
+        );
         headersLength += positionResult.bytesRead;
 
         final position = positionResult.data.toInt();
@@ -262,20 +266,26 @@ class DynamicLengthArray<T> extends BaseArrayType<T> {
   DecodingResult<List<T>> decode(ByteBuffer buffer, int offset) {
     final lengthResult = const UintType().decode(buffer, offset);
 
-    final arrayType =
-        FixedLengthArray<T>(type: type, length: lengthResult.data.toInt());
-    final dataResult =
-        arrayType.decode(buffer, offset + lengthResult.bytesRead);
+    final arrayType = FixedLengthArray<T>(
+      type: type,
+      length: lengthResult.data.toInt(),
+    );
+    final dataResult = arrayType.decode(
+      buffer,
+      offset + lengthResult.bytesRead,
+    );
 
     return DecodingResult(
-        dataResult.data, lengthResult.bytesRead + dataResult.bytesRead);
+      dataResult.data,
+      lengthResult.bytesRead + dataResult.bytesRead,
+    );
   }
 
   @override
   int get hashCode => 31 * type.hashCode;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other is DynamicLengthArray && other.type == type);
   }

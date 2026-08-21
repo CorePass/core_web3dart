@@ -15,12 +15,18 @@ void main() {
   });
 
   test('encodes and sends requests', () async {
-    await JsonRPC('url', client, '', '')
-        .call('xcb_gasPrice', ['param', 'another']);
+    await JsonRPC(
+      'url',
+      client,
+      '',
+      '',
+    ).call('xcb_gasPrice', ['param', 'another']);
 
     final request = client.request!;
-    expect(request.headers,
-        containsPair('Content-Type', startsWith('application/json')));
+    expect(
+      request.headers,
+      containsPair('Content-Type', startsWith('application/json')),
+    );
   });
 
   test('increments request id', () async {
@@ -30,14 +36,20 @@ void main() {
 
     final lastRequest = client.request!;
     expect(
-        lastRequest.finalize().bytesToString(), completion(contains('"id":2')));
+      lastRequest.finalize().bytesToString(),
+      completion(contains('"id":2')),
+    );
   });
 
   test('throws errors', () {
     final rpc = JsonRPC('url', client, '', '');
     client.nextResponse = StreamedResponse(
-      Stream.value(utf8.encode('{"id": 1, "jsonrpc": "2.0", '
-          '"error": {"code": 1, "message": "Message", "data": "data"}}')),
+      Stream.value(
+        utf8.encode(
+          '{"id": 1, "jsonrpc": "2.0", '
+          '"error": {"code": 1, "message": "Message", "data": "data"}}',
+        ),
+      ),
       200,
     );
 
@@ -52,10 +64,14 @@ class MockClient extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) {
     this.request = request;
-    return Future.value(nextResponse ??
-        StreamedResponse(
+    return Future.value(
+      nextResponse ??
+          StreamedResponse(
             Stream.value(
-                utf8.encode('{"id": 1, "jsonrpc": "2.0", "result": "0x1"}')),
-            200));
+              utf8.encode('{"id": 1, "jsonrpc": "2.0", "result": "0x1"}'),
+            ),
+            200,
+          ),
+    );
   }
 }

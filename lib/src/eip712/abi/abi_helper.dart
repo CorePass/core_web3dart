@@ -39,8 +39,8 @@ class ABIHelper {
     return Uint8List.fromList(_res);
   }
 
-// Encodes a single item (can be dynamic array)
-// @returns: Buffer
+  // Encodes a single item (can be dynamic array)
+  // @returns: Buffer
   encodeSingle(String type, arg) {
     if (type == 'address') {
       return encodeSingle('uint176', parseNumber(arg));
@@ -72,14 +72,17 @@ class ABIHelper {
     } else if (type == 'bytes') {
       arg = Uint8List.fromList(arg);
 
-      var ret = Uint8List.fromList(
-          [...encodeSingle('uint256', arg.length), ...(arg as Uint8List)]);
+      var ret = Uint8List.fromList([
+        ...encodeSingle('uint256', arg.length),
+        ...(arg as Uint8List),
+      ]);
 
       if ((arg.length % 32) != 0) {
         ret = Uint8List.fromList([
           ...ret,
           ...Uint8List.fromList(
-              List<int>.generate(32 - (arg.length % 32), (index) => 0))
+            List<int>.generate(32 - (arg.length % 32), (index) => 0),
+          ),
         ]);
       }
 
@@ -98,10 +101,12 @@ class ABIHelper {
       }
       BigInt _bigNum = parseNumber(arg);
       if (_bigNum.bitLength > size) {
-        throw Exception('Supplied uint exceeds width: ' +
-            size.toString() +
-            ' vs ' +
-            _bigNum.bitLength.toString());
+        throw Exception(
+          'Supplied uint exceeds width: ' +
+              size.toString() +
+              ' vs ' +
+              _bigNum.bitLength.toString(),
+        );
       }
       if (_bigNum.isNegative) {
         throw Exception('Supplied uint is negative');
@@ -114,10 +119,12 @@ class ABIHelper {
       }
       BigInt _bigNum = parseNumber(arg);
       if (_bigNum.bitLength > size) {
-        throw new Exception('Supplied int exceeds width: ' +
-            size.toString() +
-            ' vs ' +
-            _bigNum.bitLength.toString());
+        throw new Exception(
+          'Supplied int exceeds width: ' +
+              size.toString() +
+              ' vs ' +
+              _bigNum.bitLength.toString(),
+        );
       }
 
       return toArrayLike(_bigNum, 32);

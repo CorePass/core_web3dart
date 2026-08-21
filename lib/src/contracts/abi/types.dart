@@ -156,7 +156,8 @@ AbiType parseAbiType(String name) {
     if (typeBuffer.isNotEmpty) {
       if (openParenthesises != 0) {
         throw ArgumentError(
-            'Could not parse abi type because of mismatched brackets: $name');
+          'Could not parse abi type because of mismatched brackets: $name',
+        );
       }
       types.add(parseAbiType(typeBuffer.toString()));
     }
