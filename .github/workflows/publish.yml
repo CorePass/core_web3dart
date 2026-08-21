@@ -26,9 +26,11 @@ jobs:
         run: dart pub get
 
       - name: Set up pub.dev credentials
+        env:
+          PUB_CREDENTIALS_JSON: ${{ secrets.PUB_CREDENTIALS_JSON }}
         run: |
           mkdir -p "$HOME/.config/dart"
-          printf '%s' '${{ secrets.PUB_CREDENTIALS_JSON }}' | jq '.' > "$HOME/.config/dart/pub-credentials.json"
+          printf '%s' "$PUB_CREDENTIALS_JSON" | jq -e '.' > "$HOME/.config/dart/pub-credentials.json"
 
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
