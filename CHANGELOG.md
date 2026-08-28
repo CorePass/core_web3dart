@@ -2,6 +2,12 @@
 
 All notable changes to Core Web3Dart are documented in this file.
 
+## 2.5.1
+
+- Add a runnable package example.
+- Resolve strict pub.dev static-analysis findings.
+- Improve public API documentation coverage.
+
 ## 2.5.0
 
 - Updated the Dart SDK baseline and direct dependencies.
