@@ -11,6 +11,7 @@ const testCases = <String, String>{
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:core_web3dart/web3dart.dart' as _i1;
 
 final _contractAbi = _i1.ContractAbi.fromJson(
@@ -59,6 +60,7 @@ class Contract extends _i1.GeneratedContract {
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:core_web3dart/web3dart.dart' as _i1;
 
 final _contractAbi = _i1.ContractAbi.fromJson(
@@ -113,6 +115,7 @@ class Contract extends _i1.GeneratedContract {
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:core_web3dart/web3dart.dart' as _i1;
 
 final _contractAbi = _i1.ContractAbi.fromJson(
@@ -192,6 +195,7 @@ class Contract extends _i1.GeneratedContract {
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:core_web3dart/web3dart.dart' as _i1;
 import 'dart:typed_data' as _i2;
 
@@ -284,6 +288,7 @@ class Contract extends _i1.GeneratedContract {
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:core_web3dart/web3dart.dart' as _i1;
 
 final _contractAbi = _i1.ContractAbi.fromJson(
@@ -381,6 +386,7 @@ class Contract extends _i1.GeneratedContract {
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:core_web3dart/web3dart.dart' as _i1;
 
 final _contractAbi = _i1.ContractAbi.fromJson(
@@ -502,6 +508,7 @@ class GiveMeHello {
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:core_web3dart/web3dart.dart' as _i1;
 
 final _contractAbi = _i1.ContractAbi.fromJson(

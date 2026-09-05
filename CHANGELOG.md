@@ -2,6 +2,11 @@
 
 All notable changes to Core Web3Dart are documented in this file.
 
+## 2.5.2
+
+- Update `flutter_ed448` to 0.2.1.
+- Update build, code-generation, formatting, stream, and test dependencies.
+
 ## 2.5.1
 
 - Add a runnable package example.
